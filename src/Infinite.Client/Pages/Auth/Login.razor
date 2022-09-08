@@ -1,0 +1,31 @@
+﻿@page "/login"
+<PageTitle>Login | @ApplicationConstants.AppName</PageTitle>
+@attribute [AllowAnonymous]
+@layout AuthLayout
+<EditForm Model="_loginModel" OnValidSubmit="SubmitAsync">
+    <div class="d-flex justify-center">
+        <MudImage Src="logo.jpeg" Width="250" ObjectFit="ObjectFit.Fill" Class="rounded"  />
+    </div>
+    <div class="d-flex justify-center mt-6">
+        <MudText Typo="Typo.h4">Login | @ApplicationConstants.AppName</MudText>
+    </div>
+    <MudDivider Class="my-8" />
+    <MudGrid>
+        <DataAnnotationsValidator />
+        <MudItem xs="12">
+            <MudTextField Margin="Margin.Dense" Label="UserName" Variant="Variant.Outlined" Immediate @bind-Value="@_loginModel.UserName" For="(() => _loginModel.UserName)" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField Margin="Margin.Dense" Label="Password" Variant="Variant.Outlined" Immediate @bind-Value="@_loginModel.Password" For="(() => _loginModel.Password)" InputType="_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">Log In</MudButton>
+        </MudItem>
+    </MudGrid>
+    <MudDivider Class="my-8" />
+    <MudGrid>
+        <MudItem xs="12">
+            <MudLink Href="/account/forgot-password" Typo="Typo.body1">Forgot Password?</MudLink>
+        </MudItem>
+    </MudGrid>
+</EditForm>
