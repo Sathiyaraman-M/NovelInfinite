@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Client", "Infinite.Client\Infinite.Client.csproj", "{788AF002-F3B8-45CC-92D0-DEC131F061C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Core", "Infinite.Core\Infinite.Core.csproj", "{514C443F-0A57-431C-ABE1-F113CA3BC4C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Server", "Infinite.Server\Infinite.Server.csproj", "{6C7467B2-4D28-4F9B-A893-16218CCBDA2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{788AF002-F3B8-45CC-92D0-DEC131F061C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{788AF002-F3B8-45CC-92D0-DEC131F061C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{788AF002-F3B8-45CC-92D0-DEC131F061C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{788AF002-F3B8-45CC-92D0-DEC131F061C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514C443F-0A57-431C-ABE1-F113CA3BC4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514C443F-0A57-431C-ABE1-F113CA3BC4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514C443F-0A57-431C-ABE1-F113CA3BC4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514C443F-0A57-431C-ABE1-F113CA3BC4C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C7467B2-4D28-4F9B-A893-16218CCBDA2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C7467B2-4D28-4F9B-A893-16218CCBDA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C7467B2-4D28-4F9B-A893-16218CCBDA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C7467B2-4D28-4F9B-A893-16218CCBDA2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
