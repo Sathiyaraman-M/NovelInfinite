@@ -21,5 +21,5 @@ public class AppUser : IdentityUser, IAuditableEntity<string>
     public bool IsDeleted { get; set; }
     
     public string RefreshToken { get; set; }
-    public DateTime? RefreshTokenExpiryTime { get; set; }
+    public DateTime RefreshTokenExpiryTime { get; set; }
 }
