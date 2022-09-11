@@ -1,4 +1,5 @@
-﻿using Infinite.Core.Interfaces.Services;
+﻿using System.Security.Claims;
+using Infinite.Core.Interfaces.Services;
 using Infinite.Core.Persistence;
 using Infinite.Shared.Constants;
 using Infinite.Shared.Entities;
@@ -25,11 +26,11 @@ public class DatabaseSeeder : IDatabaseSeeder
     public void Initialize()
     {
         InitializeRoles();
-        InitializeAdminUser();
+        InitializeInternalUser();
         _appDbContext.SaveChanges();
     }
 
-    private void InitializeAdminUser()
+    private void InitializeInternalUser()
     {
         Task.Run(async () =>
         {
@@ -47,10 +48,10 @@ public class DatabaseSeeder : IDatabaseSeeder
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Seeded {FullName} user successfully!", appUser.FullName);
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, RoleConstants.Admin);
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, RoleConstants.Internal);
                     if (roleResult.Succeeded)
                     {
-                        _logger.LogInformation("Added {FullName} to {Admin} role!", appUser.FullName, RoleConstants.Admin);
+                        _logger.LogInformation("Added {FullName} to {Admin} role!", appUser.FullName, RoleConstants.Internal);
                     }
                     else
                     {
@@ -68,7 +69,7 @@ public class DatabaseSeeder : IDatabaseSeeder
                     }
                 }
             }
-        });
+        }).GetAwaiter().GetResult();
     }
 
     private void InitializeRoles()
@@ -77,28 +78,35 @@ public class DatabaseSeeder : IDatabaseSeeder
         {
             if (!await _roleManager.Roles.AnyAsync())
             {
-                var roles = new[]
+                var adminRole = new IdentityRole(RoleConstants.Internal);
+                var adminRoleResult = await _roleManager.CreateAsync(adminRole);
+                if (adminRoleResult.Succeeded)
                 {
-                    new IdentityRole(RoleConstants.Admin),
-                    new IdentityRole(RoleConstants.Faculty),
-                    new IdentityRole(RoleConstants.Student)
-                };
-                foreach (var role in roles)
+                    _logger.LogInformation("Seeded {Internal} role successfully!", RoleConstants.Internal);
+                    var packedPermission = Enum.GetValues<AppPermissions>().Aggregate("", (current, permission) => current + (char)Convert.ChangeType(permission, typeof(char)));
+                    await _roleManager.AddClaimAsync(adminRole, new Claim(ApplicationClaimTypes.Permission, packedPermission));
+                }
+                else
                 {
-                    var result = await _roleManager.CreateAsync(role);
-                    if (result.Succeeded)
+                    foreach (var error in adminRoleResult.Errors)
                     {
-                        _logger.LogInformation("Seeded {Name} role successfully!", role.Name);
+                        _logger.LogError("ErrorCode: {Code}\nDescription: {Description}", error.Code, error.Description);
                     }
-                    else
+                }
+
+                var generalRoleResult = await _roleManager.CreateAsync(new IdentityRole(RoleConstants.General));
+                if (generalRoleResult.Succeeded)
+                {
+                    _logger.LogInformation("Seeded {General} role successfully!", RoleConstants.General);
+                }
+                else
+                {
+                    foreach (var error in adminRoleResult.Errors)
                     {
-                        foreach (var error in result.Errors)
-                        {
-                            _logger.LogError("ErrorCode: {Code}\nDescription: {Description}", error.Code, error.Description);
-                        }
+                        _logger.LogError("ErrorCode: {Code}\nDescription: {Description}", error.Code, error.Description);
                     }
                 }
             }
-        });
+        }).GetAwaiter().GetResult();
     }
 }
