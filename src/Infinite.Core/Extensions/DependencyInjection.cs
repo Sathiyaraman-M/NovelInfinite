@@ -1,4 +1,8 @@
-﻿using Infinite.Core.Persistence;
+﻿using Infinite.Core.Permissions;
+using Infinite.Core.Persistence;
+using Infinite.Shared.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +15,14 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString(connectionName)));
+        return services;
+    }
+
+    public static IServiceCollection AddIdentity(this IServiceCollection services)
+    {
+        services.AddTransient<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+        services.AddTransient<IAuthorizationHandler, PermissionPolicyHandler>();
+        services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
         return services;
     }
 }
