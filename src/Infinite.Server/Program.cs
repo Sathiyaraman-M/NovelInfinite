@@ -1,11 +1,17 @@
 using Infinite.Core.Extensions;
+using Infinite.Core.Interfaces.Services;
 using Infinite.Server.Extensions;
+using Infinite.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
+builder.Services.AddConfigurations(builder.Configuration);
 builder.Services.AddCurrentUserService();
 builder.Services.AddDatabase(builder.Configuration, "DefaultConnection");
+builder.Services.AddIdentity();
+builder.Services.EnableAuthentication(builder.Configuration);
+builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
@@ -34,5 +40,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
     endpoints.MapFallbackToFile("index.html");
 });
+
+app.Services.GetRequiredService<IDatabaseSeeder>().Initialize();
 
 app.Run();
