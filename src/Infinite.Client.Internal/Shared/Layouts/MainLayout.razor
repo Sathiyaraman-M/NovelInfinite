@@ -1,0 +1,15 @@
+﻿@inherits LayoutComponentBase
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+<MudLayout>
+    <MudAppBar Dense>
+        <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
+        <MudChip Color="Color.Error" Variant="Variant.Filled" Size="Size.Small">INTERNAL</MudChip>
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer Class="pt-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
