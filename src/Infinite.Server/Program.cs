@@ -41,6 +41,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapFallbackToFile("index.html");
 });
 
-app.Services.GetRequiredService<IDatabaseSeeder>().Initialize();
+app.Services.CreateScope().ServiceProvider.GetRequiredService<IDatabaseSeeder>().Initialize();
 
 app.Run();
