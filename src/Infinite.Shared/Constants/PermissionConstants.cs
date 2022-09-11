@@ -5,7 +5,7 @@ public static class ApplicationClaimTypes
     public const string Permission = "Permission";
 }
 
-public static class Permissions
+public enum AppPermissions : ushort
 {
-    
+    NotSet = 0
 }
