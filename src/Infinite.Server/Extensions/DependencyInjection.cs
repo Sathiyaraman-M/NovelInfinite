@@ -8,6 +8,7 @@ using Infinite.Shared.Configurations;
 using Infinite.Shared.Wrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Infinite.Server.Extensions;
 
@@ -84,6 +85,57 @@ public static class DependencyInjection
                     return context.Response.WriteAsync(result);
                 },
             };
+        });
+        return services;
+    }
+
+    public static IServiceCollection EnableSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly.IsDynamic) continue;
+                var xmlFile = $"{assembly.GetName().Name}.xml";
+                var xmlPath = Path.Combine(baseDirectory, xmlFile);
+                if (File.Exists(xmlPath))
+                {
+                    c.IncludeXmlComments(xmlPath);
+                }
+            }
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Novel Infinite",
+            });
+
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                Description = "Input your Bearer token in this format - Bearer {your token here} to access this API",
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer",
+                        },
+                        Scheme = "Bearer",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+                    }, new List<string>()
+                },
+            });
         });
         return services;
     }

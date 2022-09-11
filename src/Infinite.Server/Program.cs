@@ -2,6 +2,7 @@ using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Services;
 using Infinite.Server.Extensions;
 using Infinite.Server.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
+builder.Services.EnableSwagger();
 
 var app = builder.Build();
 
@@ -27,6 +29,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
+    RequestPath = new PathString("/Files")
+});
+
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 
@@ -39,6 +47,14 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapRazorPages();
     endpoints.MapFallbackToFile("index.html");
+});
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Novel Infinite");
+    options.DisplayRequestDuration();
+    options.RoutePrefix = "swagger";
 });
 
 app.Services.CreateScope().ServiceProvider.GetRequiredService<IDatabaseSeeder>().Initialize();
