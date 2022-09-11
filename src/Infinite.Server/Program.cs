@@ -1,6 +1,7 @@
 using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Services;
 using Infinite.Server.Extensions;
+using Infinite.Server.Middlewares;
 using Infinite.Server.Services;
 using Microsoft.Extensions.FileProviders;
 
@@ -21,14 +22,13 @@ builder.Services.EnableSwagger();
 var app = builder.Build();
 
 app.UseCors();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
 }
 
-app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
@@ -36,18 +36,21 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseHttpsRedirection();
-app.UseBlazorFrameworkFiles();
 
+app.UseBlazorFrameworkFiles();
+app.UseBlazorFrameworkFiles("/Internal");
+app.UseStaticFiles();
+app.UseStaticFiles("/Internal");
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapRazorPages();
-    endpoints.MapFallbackToFile("index.html");
-});
+app.MapControllers();
+app.MapRazorPages();
+app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/Internal"),
+    adminApp => adminApp.UseEndpoints(endpoint => endpoint.MapFallbackToFile("Internal/{*path:nonfile}","Internal/index.html")));
+app.MapFallbackToFile("index.html");
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
