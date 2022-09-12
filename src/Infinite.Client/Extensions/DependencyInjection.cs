@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Infinite.Client.Authentication;
+using Infinite.Client.Services.HttpClients;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
@@ -30,8 +31,9 @@ public static class DependencyInjection
 
     private static void AddHttpClients(this IServiceCollection services, string baseAddress)
     {
-        services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("").EnableIntercept(sp));
-        services.AddHttpClient("", client => client.BaseAddress = new Uri(baseAddress)).AddHttpMessageHandler<AuthenticationHeaderHandler>();
+        services.AddTransient<AuthenticationHttpClient>();
+        services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("InfiniteAPI").EnableIntercept(sp));
+        services.AddHttpClient("InfiniteAPI", client => client.BaseAddress = new Uri(baseAddress)).AddHttpMessageHandler<AuthenticationHeaderHandler>();
         services.AddHttpClientInterceptor();
     }
 }
