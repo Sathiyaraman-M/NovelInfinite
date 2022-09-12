@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Server", "Infinite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Shared", "Infinite.Shared\Infinite.Shared.csproj", "{8432C52E-6797-47A2-B261-74B571E27C5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Client.Internal", "Infinite.Client.Internal\Infinite.Client.Internal.csproj", "{E5C6A85A-2779-4946-95BA-91D3B0C84DB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Internal.Client", "Infinite.Internal.Client\Infinite.Internal.Client.csproj", "{E5C6A85A-2779-4946-95BA-91D3B0C84DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
