@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Infinite.Shared\Infinite.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services" />
-  </ItemGroup>
-
 </Project>

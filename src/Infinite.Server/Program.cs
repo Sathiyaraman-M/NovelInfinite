@@ -29,18 +29,9 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
 }
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
-    RequestPath = new PathString("/Files")
-});
-
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
-app.UseBlazorFrameworkFiles("/Internal");
-app.UseStaticFiles();
-app.UseStaticFiles("/Internal");
 app.UseRouting();
 
 app.UseAuthentication();
@@ -48,9 +39,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
-app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/Internal"),
-    adminApp => adminApp.UseEndpoints(endpoint => endpoint.MapFallbackToFile("Internal/{*path:nonfile}","Internal/index.html")));
-app.MapFallbackToFile("index.html");
+app.MapFallbackToFile("_General");
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
