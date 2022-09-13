@@ -4,11 +4,25 @@
 <MudSnackbarProvider/>
 <MudLayout>
     <MudAppBar Dense>
+        <MudIconButton Edge="Edge.Start" Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" OnClick="@(() => _open = !_open)" />
         <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
         <MudChip Color="Color.Error" Variant="Variant.Filled" Size="Size.Small">INTERNAL</MudChip>
         <MudSpacer/>
-        <MudIconButton Icon="@Icons.Material.Filled.Logout" OnClick="Logout" />
+        <MudIconButton Edge="Edge.End" Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" OnClick="Logout" />
     </MudAppBar>
+    <MudDrawer @bind-Open="_open">
+        <MudDrawerHeader LinkToIndex>
+            <MudAvatar Color="Color.Secondary">@_firstLetterOfName</MudAvatar>
+            <div class="ms-2">
+                <MudText Typo="Typo.body1">@_fullName</MudText>
+                <MudText Typo="Typo.caption">INTERNAL USER</MudText>
+            </div>
+        </MudDrawerHeader>
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+            <MudNavLink Href="/Users">Users</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
     <MudMainContent>
         <MudContainer Class="pt-4">
             @Body
