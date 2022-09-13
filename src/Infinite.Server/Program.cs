@@ -43,7 +43,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
-app.MapFallbackToFile("_General");
+app.MapFallbackToFile("index.html");
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>

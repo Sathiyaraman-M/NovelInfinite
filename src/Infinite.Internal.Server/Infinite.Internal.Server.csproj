@@ -22,8 +22,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Pages\_Internal.cshtml" />
-  </ItemGroup>
-
 </Project>
