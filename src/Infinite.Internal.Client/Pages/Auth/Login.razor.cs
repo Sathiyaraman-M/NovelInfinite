@@ -5,15 +5,6 @@ namespace Infinite.Internal.Client.Pages.Auth;
 
 public partial class Login
 {
-    protected override async Task OnInitializedAsync()
-    {
-        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-        if (user.Identity?.IsAuthenticated ?? false)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-    }
-
     private readonly TokenRequest _loginModel = new TokenRequest();
 
     private async Task SubmitAsync()
@@ -25,7 +16,7 @@ public partial class Login
             {
                 Snackbar.Add(message, Severity.Success);
             }
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/", true);
         }
         else
         {
