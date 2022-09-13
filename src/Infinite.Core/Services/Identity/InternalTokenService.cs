@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Infinite.Core.Interfaces.Services.Identity;
 using Infinite.Shared.Configurations;
+using Infinite.Shared.Constants;
 using Infinite.Shared.Entities;
 using Infinite.Shared.Requests.Identity;
 using Infinite.Shared.Responses.Identity;
@@ -14,18 +15,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infinite.Core.Services.Identity;
 
-public class TokenService : ITokenService
+public class InternalTokenService : ITokenService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly AppConfiguration _appConfiguration;
 
-    public TokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<AppConfiguration> options)
+    public InternalTokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<AppConfiguration> options)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _appConfiguration = options.Value;
     }
+    
+    
     
     public async Task<IResult<TokenResponse>> LoginAsync(TokenRequest tokenRequest)
     {
@@ -88,6 +91,10 @@ public class TokenService : ITokenService
             if (user == null)
             {
                 throw new Exception("User Not Found.");
+            }
+            if (!await _userManager.IsInRoleAsync(user, RoleConstants.Internal))
+            {
+                throw new Exception("General Users not permitted");
             }
             if (user.IsDeleted)
             {

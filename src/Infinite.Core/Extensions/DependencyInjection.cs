@@ -22,7 +22,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddIdentity(this IServiceCollection services)
     {
-        services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         services.AddTransient<IAuthorizationHandler, PermissionPolicyHandler>();
         services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();

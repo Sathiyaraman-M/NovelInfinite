@@ -1,9 +1,10 @@
 using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Services;
+using Infinite.Core.Interfaces.Services.Identity;
+using Infinite.Core.Services.Identity;
 using Infinite.Server.Extensions;
 using Infinite.Server.Middlewares;
 using Infinite.Server.Services;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddConfigurations(builder.Configuration);
 builder.Services.AddCurrentUserService();
 builder.Services.AddDatabase(builder.Configuration, "DefaultConnection");
 builder.Services.AddIdentity();
+builder.Services.AddTransient<ITokenService, GeneralTokenService>();
 builder.Services.EnableAuthentication(builder.Configuration);
 builder.Services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddHttpContextAccessor();
@@ -31,6 +33,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 app.UseBlazorFrameworkFiles();
 app.UseRouting();
 

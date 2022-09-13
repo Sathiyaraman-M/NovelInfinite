@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infinite.Internal.Client\Infinite.Internal.Client.csproj" />
     <ProjectReference Include="..\Infinite.Client\Infinite.Client.csproj" />
     <ProjectReference Include="..\Infinite.Core\Infinite.Core.csproj" />
   </ItemGroup>

@@ -16,21 +16,24 @@ public partial class Login
 
     private readonly TokenRequest _loginModel = new TokenRequest();
 
-    private static void SubmitAsync()
+    private async Task SubmitAsync()
     {
-        // var result = await loginHttpClient.Login(_loginModel);
-        // if (result.Succeeded)
-        // {
-        //     Snackbar.Add(result.Messages[0], Severity.Success);
-        //     NavigationManager.NavigateTo("/");
-        // }
-        // else
-        // {
-        //     foreach (var message in result.Messages)
-        //     {
-        //         Snackbar.Add(message, Severity.Error);
-        //     }
-        // }
+        var result = await AuthenticationHttpClient.Login(_loginModel);
+        if (result.Succeeded)
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Success);
+            }
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
     }
 
     private bool _passwordVisibility;
