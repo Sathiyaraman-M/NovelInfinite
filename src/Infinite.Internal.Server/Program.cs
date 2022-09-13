@@ -2,9 +2,9 @@ using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Services;
 using Infinite.Core.Interfaces.Services.Identity;
 using Infinite.Core.Services.Identity;
-using Infinite.Server.Internal.Extensions;
-using Infinite.Server.Internal.Middlewares;
-using Infinite.Server.Internal.Services;
+using Infinite.Internal.Server.Extensions;
+using Infinite.Internal.Server.Middlewares;
+using Infinite.Internal.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

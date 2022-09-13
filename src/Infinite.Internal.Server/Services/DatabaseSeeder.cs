@@ -6,7 +6,7 @@ using Infinite.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infinite.Server.Internal.Services;
+namespace Infinite.Internal.Server.Services;
 
 public class DatabaseSeeder : IDatabaseSeeder
 {

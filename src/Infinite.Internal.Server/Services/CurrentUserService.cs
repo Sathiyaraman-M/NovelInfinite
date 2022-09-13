@@ -1,7 +1,7 @@
 ﻿using Infinite.Core.Interfaces.Services;
 using Infinite.Internal.Client.Extensions;
 
-namespace Infinite.Server.Internal.Services;
+namespace Infinite.Internal.Server.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

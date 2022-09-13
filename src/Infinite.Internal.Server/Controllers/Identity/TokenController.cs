@@ -2,7 +2,7 @@
 using Infinite.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Infinite.Server.Internal.Controllers.Identity;
+namespace Infinite.Internal.Server.Controllers.Identity;
 
 [ApiController]
 [Route("api/token")]

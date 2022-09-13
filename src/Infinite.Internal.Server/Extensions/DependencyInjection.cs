@@ -3,14 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using Infinite.Core.Interfaces.Services;
-using Infinite.Server.Internal.Services;
+using Infinite.Internal.Server.Services;
 using Infinite.Shared.Configurations;
 using Infinite.Shared.Wrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace Infinite.Server.Internal.Extensions;
+namespace Infinite.Internal.Server.Extensions;
 
 public static class DependencyInjection
 {
