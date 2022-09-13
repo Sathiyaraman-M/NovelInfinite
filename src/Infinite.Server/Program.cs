@@ -1,7 +1,7 @@
 using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Services;
 using Infinite.Core.Interfaces.Services.Identity;
-using Infinite.Core.Services.Identity;
+using Infinite.Core.Services.Identity.TokenServices;
 using Infinite.Server.Extensions;
 using Infinite.Server.Middlewares;
 using Infinite.Server.Services;

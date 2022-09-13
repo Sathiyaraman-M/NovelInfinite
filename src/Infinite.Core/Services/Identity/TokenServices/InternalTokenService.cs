@@ -13,20 +13,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infinite.Core.Services.Identity;
+namespace Infinite.Core.Services.Identity.TokenServices;
 
-public class GeneralTokenService : ITokenService
+public class InternalTokenService : ITokenService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly AppConfiguration _appConfiguration;
 
-    public GeneralTokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<AppConfiguration> options)
+    public InternalTokenService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<AppConfiguration> options)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _appConfiguration = options.Value;
     }
+    
+    
     
     public async Task<IResult<TokenResponse>> LoginAsync(TokenRequest tokenRequest)
     {
@@ -90,13 +92,13 @@ public class GeneralTokenService : ITokenService
             {
                 throw new Exception("User Not Found.");
             }
+            if (!await _userManager.IsInRoleAsync(user, RoleConstants.Internal))
+            {
+                throw new Exception("General Users not permitted");
+            }
             if (user.IsDeleted)
             {
                 throw new Exception("User Not Found.");
-            }
-            if (!await _userManager.IsInRoleAsync(user, RoleConstants.General))
-            {
-                throw new Exception("Internal Users not permitted");
             }
             if (!user.IsActive)
             {
