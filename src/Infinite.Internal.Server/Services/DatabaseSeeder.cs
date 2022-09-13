@@ -78,17 +78,15 @@ public class DatabaseSeeder : IDatabaseSeeder
         {
             if (!await _roleManager.Roles.AnyAsync())
             {
-                var adminRole = new IdentityRole(RoleConstants.Internal);
-                var adminRoleResult = await _roleManager.CreateAsync(adminRole);
-                if (adminRoleResult.Succeeded)
+                var internalRole = new IdentityRole(RoleConstants.Internal);
+                var internalRoleResult = await _roleManager.CreateAsync(internalRole);
+                if (internalRoleResult.Succeeded)
                 {
                     _logger.LogInformation("Seeded {Internal} role successfully!", RoleConstants.Internal);
-                    var packedPermission = Enum.GetValues<AppPermissions>().Aggregate("", (current, permission) => current + (char)Convert.ChangeType(permission, typeof(char)));
-                    await _roleManager.AddClaimAsync(adminRole, new Claim(ApplicationClaimTypes.Permission, packedPermission));
                 }
                 else
                 {
-                    foreach (var error in adminRoleResult.Errors)
+                    foreach (var error in internalRoleResult.Errors)
                     {
                         _logger.LogError("ErrorCode: {Code}\nDescription: {Description}", error.Code, error.Description);
                     }
@@ -101,12 +99,22 @@ public class DatabaseSeeder : IDatabaseSeeder
                 }
                 else
                 {
-                    foreach (var error in adminRoleResult.Errors)
+                    foreach (var error in internalRoleResult.Errors)
                     {
                         _logger.LogError("ErrorCode: {Code}\nDescription: {Description}", error.Code, error.Description);
                     }
                 }
             }
+
+            var existingInternalRole = await _roleManager.FindByNameAsync(RoleConstants.Internal);
+            var packedPermission = Enum.GetValues<AppPermissions>().Aggregate("", (current, permission) => current + (char)Convert.ChangeType(permission, typeof(char)));
+            var claims = await _roleManager.GetClaimsAsync(existingInternalRole);
+            foreach (var claim in claims)
+            {
+                await _roleManager.RemoveClaimAsync(existingInternalRole, claim);
+            }
+            await _roleManager.AddClaimAsync(existingInternalRole, new Claim(ApplicationClaimTypes.Permission, packedPermission));
+            
         }).GetAwaiter().GetResult();
     }
 }
