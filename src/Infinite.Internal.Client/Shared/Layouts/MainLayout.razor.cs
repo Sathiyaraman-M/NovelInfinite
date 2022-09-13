@@ -16,7 +16,7 @@ public partial class MainLayout
         _user = state.User;
         _userName = _user.GetUserName();
         _fullName = _user.GetFullName();
-        _firstLetterOfName = _userName[0].ToString();
+        _firstLetterOfName = !string.IsNullOrEmpty(_userName) ? _userName[0].ToString() : "A";
         await base.OnInitializedAsync();
     }
 
