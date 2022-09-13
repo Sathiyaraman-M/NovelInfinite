@@ -21,7 +21,7 @@ public static class DependencyInjection
     {
         builder.Services.AddAuthorizationCore();
         builder.Services.AddBlazoredLocalStorage();
-        builder.Services.AddHttpClients(builder.HostEnvironment.BaseAddress.Replace("/internal", ""));
+        builder.Services.AddHttpClients(builder.HostEnvironment.BaseAddress);
         builder.Services.AddMudServices();
         builder.Services.AddTransient<AuthenticationHeaderHandler>();
         builder.Services.AddTransient<InternalAppAuthenticationStateProvider>();

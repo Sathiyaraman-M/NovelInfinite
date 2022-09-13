@@ -2,7 +2,7 @@
 
 public partial class MainLayout
 {
-    public async Task Logout()
+    private async Task Logout()
     {
         if(await DialogService.ShowMessageBox("Log out?", "Are you sure want to logout?", "Yes", "No") == true)
         {

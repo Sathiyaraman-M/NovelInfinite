@@ -2,7 +2,7 @@
 using System.Text.Json;
 using Infinite.Shared.Wrapper;
 
-namespace Infinite.Server.Internal.Middlewares;
+namespace Infinite.Internal.Server.Middlewares;
 
 public class ErrorHandlerMiddleware
 {

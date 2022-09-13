@@ -25,7 +25,7 @@ public partial class Login
             {
                 Snackbar.Add(message, Severity.Success);
             }
-            NavigationManager.NavigateTo("/Internal/");
+            NavigationManager.NavigateTo("/");
         }
         else
         {
