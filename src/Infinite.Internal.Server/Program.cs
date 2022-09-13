@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 builder.Services.AddConfigurations(builder.Configuration);
 builder.Services.AddCurrentUserService();
+builder.Services.AddCoreServices();
 builder.Services.AddDatabase(builder.Configuration, "DefaultConnection");
 builder.Services.AddIdentity();
 builder.Services.AddTransient<ITokenService, InternalTokenService>();

@@ -1,7 +1,7 @@
-﻿using Infinite.Core.Interfaces.Services.Identity;
+﻿using Infinite.Core.Interfaces.Services;
 using Infinite.Core.Permissions;
 using Infinite.Core.Persistence;
-using Infinite.Core.Services.Identity;
+using Infinite.Core.Services;
 using Infinite.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +25,12 @@ public static class DependencyInjection
         services.AddTransient<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         services.AddTransient<IAuthorizationHandler, PermissionPolicyHandler>();
         services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+        return services;
+    }
+
+    public static IServiceCollection AddCoreServices(this IServiceCollection services)
+    {
+        services.AddTransient<IMailService, MailService>();
         return services;
     }
 }
