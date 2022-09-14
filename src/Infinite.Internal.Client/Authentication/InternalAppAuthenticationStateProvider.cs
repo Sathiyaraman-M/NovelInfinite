@@ -73,16 +73,8 @@ public class InternalAppAuthenticationStateProvider : AuthenticationStateProvide
 
         if (permissions != null)
         {
-            Console.Write(permissions as string);
-            foreach (var permission in (permissions as string))
-            {
-                var value = (AppPermissions)Convert.ChangeType(permission, typeof(ushort));
-                claims.Add(new Claim(ApplicationClaimTypes.Permission, value.ToString()));
-            }
-            // claims.AddRange((permissions as string)!
-            //     .Select(permission => ).Select(enumVal =>
-            //         new Claim(ApplicationClaimTypes.Permission, enumVal.ToString())));
-
+            Console.Write(permissions.ToString());
+            claims.AddRange(permissions.ToString()!.Select(permission => (AppPermissions)Convert.ChangeType(permission, typeof(ushort))).Select(value => new Claim(ApplicationClaimTypes.Permission, value.ToString())));
             keyValuePairs.Remove(ApplicationClaimTypes.Permission);
         }
         claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString() ?? string.Empty)));
