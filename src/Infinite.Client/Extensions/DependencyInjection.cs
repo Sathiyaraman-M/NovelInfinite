@@ -32,6 +32,7 @@ public static class DependencyInjection
     private static void AddHttpClients(this IServiceCollection services, string baseAddress)
     {
         services.AddTransient<AuthenticationHttpClient>();
+        services.AddTransient<UserHttpClient>();
         services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("InfiniteAPI").EnableIntercept(sp));
         services.AddHttpClient("InfiniteAPI", client => client.BaseAddress = new Uri(baseAddress)).AddHttpMessageHandler<AuthenticationHeaderHandler>();
         services.AddHttpClientInterceptor();

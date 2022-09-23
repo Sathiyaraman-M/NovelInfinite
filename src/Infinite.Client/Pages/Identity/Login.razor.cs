@@ -1,7 +1,7 @@
 ﻿using Infinite.Shared.Requests.Identity;
 using MudBlazor;
 
-namespace Infinite.Client.Pages.Auth;
+namespace Infinite.Client.Pages.Identity;
 
 public partial class Login
 {
