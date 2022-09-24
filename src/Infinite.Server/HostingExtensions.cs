@@ -1,7 +1,7 @@
-﻿using Infinite.Core.Extensions;
-using Infinite.Core.Persistence;
+﻿using Infinite.Core.Persistence;
 using Infinite.Server.Extensions;
 using Infinite.Server.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infinite.Server;
@@ -13,7 +13,19 @@ public static class HostingExtensions
         builder.Services.AddCors();
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-        
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://localhost:8500";
+                options.Audience = "InfiniteAPI";
+                options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            });
+        builder.Services.AddIdentityServer();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
         builder.Services.AddRazorPages();
