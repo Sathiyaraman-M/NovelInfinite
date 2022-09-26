@@ -1,0 +1,119 @@
+﻿@page "/Personal"
+@using Infinite.Shared.Entities
+<PageTitle>Personal | @ApplicationConstants.AppName</PageTitle>
+<MudText Typo="Typo.h5">Personal Info</MudText>
+<MudDivider Light Class="my-2" />
+@if (_isMdLoaded)
+{
+    <MudPaper Outlined Elevation="0" Class="pa-4">
+        @if (string.IsNullOrEmpty(_userPortFolioMd))
+        {
+            <div class="d-flex justify-center">
+                <div class="d-flex flex-column">
+                    <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
+                    <div class="d-flex justify-center">
+                        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
+                                   OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))" 
+                                   DisableElevation Class="mt-2">
+                            Create one
+                        </MudButton>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <MudMarkdown Value="@_userPortFolioMd" />
+        }
+    </MudPaper>
+}
+else
+{
+    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+}
+<MudToolBar>
+    <MudText Typo="Typo.h5">Your Projects</MudText>
+    <MudSpacer/>
+    <MudTooltip Text="Add Project">
+        <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Project/New"/>
+    </MudTooltip>
+</MudToolBar>
+<MudDivider Light Class="my-2" />
+@if (_isBlogsLoaded)
+{
+    <MudToolBar>
+        <MudText Typo="Typo.h5">Your Blogs</MudText>
+        <MudSpacer/>
+        <MudTooltip Text="Add Blog">
+            <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Blog/New"/>
+        </MudTooltip>
+    </MudToolBar>
+    <MudDivider Light Class="my-2" />
+    <MudGrid>
+        @foreach (var blog in _myLast4Blogs)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <a href=@($"/Blog/{blog.Id}")>
+                    <MudCard Class="pa-4">
+                        <MudText Typo="Typo.h6">@blog.Title</MudText>
+                        <MudText Typo="Typo.caption">@blog.AuthorName</MudText>
+                        <MudText Typo="Typo.body1">@blog.CreatedDate</MudText>
+                    </MudCard>
+                </a>
+            </MudItem>
+        }
+    </MudGrid>
+}
+else
+{
+    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+}
+
+@code {
+    private string _userPortFolioMd;
+    private List<Blog> _myLast4Blogs = new();
+    private bool _isMdLoaded;
+    private bool _isBlogsLoaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPortfolio();
+        await LoadLatestBlogs();
+        await base.OnInitializedAsync();
+        _isMdLoaded = true;
+        _isBlogsLoaded = true;
+    }
+    
+    private async Task LoadPortfolio()
+    {
+        var portfolioResult = await HttpClient.GetFromJsonAsync<Result<string>>("api/manage/portfolio");
+        if (portfolioResult!.Succeeded)
+        {
+            _userPortFolioMd = portfolioResult.Data;
+        }
+        else
+        {
+            foreach (var message in portfolioResult.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+    }
+
+    private async Task LoadLatestBlogs()
+    {
+        var blogsResult = await HttpClient.GetFromJsonAsync<Result<List<Blog>>>("api/blog/my-last-four");
+        
+        if (blogsResult!.Succeeded)
+        {
+            _myLast4Blogs = blogsResult.Data;
+        }
+        else
+        {
+            foreach (var message in blogsResult.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+    }
+}
