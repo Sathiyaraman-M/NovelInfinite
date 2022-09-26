@@ -2,4 +2,14 @@
 
 <PageTitle>Index</PageTitle>
 
-<MudText>Welcome To Index</MudText>
+<MudText Typo="Typo.h6">Welcome To Index</MudText>
+<MudText>Claims</MudText>
+
+<AuthorizeView>
+    <Authorized>
+        @foreach (var claim in context.User.Claims)
+        {
+            <MudText>@claim.Type @claim.Value</MudText>
+        }
+    </Authorized>
+</AuthorizeView>
