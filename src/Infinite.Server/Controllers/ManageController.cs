@@ -1,4 +1,5 @@
-﻿using Infinite.Client.Extensions;
+﻿using System.Security.Claims;
+using IdentityModel;
 using Infinite.Core.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public class ManageController : ControllerBase
     [HttpGet("portfolio")]
     public async Task<IActionResult> GetCurrentUserPortFolio()
     {
-        var userId = _httpContextAccessor.HttpContext?.User.GetUserId();
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(JwtClaimTypes.Subject);
         return Ok(await _manageAccountService.GetPortFolioMd(userId));
     }
 }
