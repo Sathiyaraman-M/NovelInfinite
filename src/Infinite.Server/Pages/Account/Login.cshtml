@@ -1,0 +1,42 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<h5 class="mdc-typography--headline5">@ViewData["Title"]</h5>
+<h6 class="mdc-typography--headline6">Use another service to log in.</h6>
+<hr />
+@{
+    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+    {
+        <div>
+            <p class="mdc-typography--body1">
+                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                about setting up this ASP.NET application to support logging in via external services</a>.
+            </p>
+        </div>
+    }
+    else
+    {
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+            <div>
+                <p>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <div class="mdc-touch-target-wrapper">
+                            <button class="mdc-button mdc-button--touch mdc-button--raised" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                <span class="mdc-button__ripple"></span>
+                                <span class="mdc-button__touch"></span>
+                                <span class="mdc-button__label">@provider.DisplayName</span>
+                            </button>
+                        </div>
+                        @* <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button> *@
+                    }
+                </p>
+            </div>
+        </form>
+    }
+}

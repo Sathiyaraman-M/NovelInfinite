@@ -1,0 +1,23 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Google Login";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h2 id="external-login-title">Associated your @Model.ProviderDisplayName account.</h2>
+<hr />
+
+<p id="external-login-description" class="text-info">
+    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
+</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <input asp-for="Input.Email" class="form-control" hidden readonly autocomplete="email" />
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Enter Infinite</button>
+        </form>
+    </div>
+</div>

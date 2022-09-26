@@ -7,6 +7,7 @@ using Infinite.Core.Services;
 using Infinite.Server.Middlewares;
 using Infinite.Shared.Configurations;
 using Infinite.Shared.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -20,7 +21,7 @@ public static class HostingExtensions
         
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<AppDbContext>();
         builder.Services.AddIdentityServer()
             .AddApiAuthorization<AppUser, AppDbContext>();
