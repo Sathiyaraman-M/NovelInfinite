@@ -1,12 +1,16 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider/>
+<MudThemeProvider @bind-IsDarkMode="AppearanceService.IsDarkMode" Theme="AppearanceService.AppTheme" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 <MudLayout>
     <MudAppBar Dense>
+        <MudIconButton Icon="@Icons.Material.Rounded.Home" OnClick="@(() => NavigationManager.NavigateTo("/"))" 
+                       Color="Color.Inherit" Edge="Edge.Start" />
         <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
-        <MudIconButton Icon="@Icons.Material.Outlined.Home" OnClick="@(() => NavigationManager.NavigateTo("/"))" 
-                       Color="Color.Inherit" />
+        <MudButton Href="/Explore" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Explore"
+                   Class="ml-2">Explore</MudButton>
+        <MudButton Href="/Manage-Account" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.AccountCircle"
+                   Class="ml-2">Manage Account</MudButton>
         <MudSpacer />
         <LoginDisplay />
     </MudAppBar>
