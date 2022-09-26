@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+﻿using Infinite.Client.Services;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using MudBlazor.Services;
 
@@ -19,6 +20,7 @@ public static class HostingExtensions
         builder.Services.ConfigureHttpClients(builder.HostEnvironment.BaseAddress);
         builder.Services.AddApiAuthorization();
         builder.Services.AddMudServices();
+        builder.Services.AddSingleton<AppearanceService>();
         return builder;
     }
 
