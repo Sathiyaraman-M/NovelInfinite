@@ -1,6 +1,12 @@
 ﻿@page "/authentication/{action}"
 @attribute [AllowAnonymous]
-<RemoteAuthenticatorView Action="@Action" />
+<RemoteAuthenticatorView Action="@Action">
+    <LogOutSucceeded>
+        @{
+            NavigationManager.NavigateTo("/");
+        }
+    </LogOutSucceeded>
+</RemoteAuthenticatorView>
 
 @code{
     [Parameter] public string Action { get; set; }

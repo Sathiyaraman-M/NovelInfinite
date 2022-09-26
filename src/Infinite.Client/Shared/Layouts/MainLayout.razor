@@ -4,13 +4,16 @@
 <MudSnackbarProvider/>
 <MudLayout>
     <MudAppBar Dense>
-        <MudIconButton Icon="@Icons.Material.Rounded.Home" OnClick="@(() => NavigationManager.NavigateTo("/"))" 
-                       Color="Color.Inherit" Edge="Edge.Start" />
         <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
-        <MudButton Href="/Explore" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Explore"
-                   Class="ml-2">Explore</MudButton>
-        <MudButton Href="/Manage-Account" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.AccountCircle"
-                   Class="ml-2">Manage Account</MudButton>
+        <MudButton Href="/" Color="Color.Inherit" StartIcon="@Icons.Material.Rounded.Home" Class="ml-4">
+            Home
+        </MudButton>
+        <MudButton Href="/Personal" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.MyLocation" Class="ml-2">
+            Personal
+        </MudButton>
+        <MudButton Href="/Explore" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Explore" Class="ml-2">
+            Explore
+        </MudButton>
         <MudSpacer />
         <LoginDisplay />
     </MudAppBar>

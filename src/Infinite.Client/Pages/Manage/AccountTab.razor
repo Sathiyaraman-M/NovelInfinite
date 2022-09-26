@@ -1,0 +1,37 @@
+﻿@using Infinite.Client.Extensions
+@inject SignOutSessionStateManager SignOutSessionStateManager
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <MudText Typo="Typo.h5">Account</MudText>
+    <MudDivider Light Class="my-2" />
+    <MudText Typo="Typo.h6">Delete your account permanently</MudText>
+    <div>
+        <MudText Typo="Typo.body2">
+            Doing so, you wil permanently lose access to your account and also removes all your personal info, projects and blogs from Infinite.
+        </MudText>
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Error" DisableElevation Class="mt-2"
+                   StartIcon="@Icons.Material.Filled.Delete" OnClick="DeleteInfiniteAccount">Delete Account</MudButton>
+    </div>
+</div>
+
+@code
+{
+    private async Task DeleteInfiniteAccount()
+    {
+        var response = await HttpClient.DeleteAsync("api/manage/account");
+        var result = await response.ToResult();
+        if (result.Succeeded)
+        {
+            Snackbar.Add("Your account is now permanently deleted from Infinite's Database", Severity.Warning);
+            await SignOutSessionStateManager.SetSignOutState();
+            NavigationManager.NavigateTo("authentication/logout");
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+    }
+    
+}
