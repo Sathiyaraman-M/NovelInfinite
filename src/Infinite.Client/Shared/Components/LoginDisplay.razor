@@ -1,8 +1,10 @@
-﻿@inject SignOutSessionStateManager SignOutManager
+﻿@using System.Security.Claims
+@using IdentityModel
+@inject SignOutSessionStateManager SignOutManager
 
 <AuthorizeView>
     <Authorized>
-        <MudLink Color="Color.Inherit" Href="authentication/profile" Class="mx-2">Hello, @context.User.Identity?.Name!</MudLink>
+        <MudLink Color="Color.Inherit" Href="authentication/profile" Class="mx-2">Hello, @(context.User.FindFirstValue(JwtClaimTypes.PreferredUserName))!</MudLink>
         <MudButton Color="Color.Inherit" OnClick="BeginSignOut">Log out</MudButton>
     </Authorized>
     <NotAuthorized>

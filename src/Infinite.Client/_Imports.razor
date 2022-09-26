@@ -17,6 +17,7 @@
 @using System.Net.Http.Json
 @using Infinite.Client.Services
 
+@attribute [Authorize]
 @inject AppearanceService AppearanceService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IDialogService DialogService
