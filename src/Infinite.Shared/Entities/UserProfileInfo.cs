@@ -1,6 +1,8 @@
-﻿namespace Infinite.Shared.Entities;
+﻿using Infinite.Shared.Contracts;
 
-public class UserProfileInfo
+namespace Infinite.Shared.Entities;
+
+public class UserProfileInfo : IEntity<string>
 {
     public string Id { get; set; }
     public AppUser User { get; set; }
