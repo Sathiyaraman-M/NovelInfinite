@@ -85,6 +85,7 @@ public static class HostingExtensions
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
         services.AddTransient<IManageAccountService, ManageAccountService>();
+        services.AddTransient<IBlogService, BlogService>();
     }
 
     private static void EnableSwagger(this IServiceCollection services)
