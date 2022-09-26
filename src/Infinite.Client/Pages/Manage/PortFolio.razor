@@ -1,0 +1,62 @@
+﻿@using Infinite.Client.Extensions
+@using Markdig
+@if (_isLoaded)
+{
+    <MudPaper Elevation="0" Outlined Class="pa-4">
+        @if (string.IsNullOrEmpty(_userPortFolioMd))
+        {
+            <div class="d-flex justify-center">
+                <div class="d-flex flex-column">
+                    <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
+                    <div class="d-flex justify-center">
+                        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
+                                   DisableElevation Class="mt-2">
+                            Create one
+                        </MudButton>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            @((MarkupString)RenderMarkdown(_userPortFolioMd))
+        }
+    </MudPaper>
+}
+else
+{
+    <MudProgressLinear Indeterminate Color="Color.Secondary"/>
+}
+
+
+@code {
+
+    private string _userPortFolioMd;
+    private bool _isLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>("api/manage/portfolio");
+        if (result!.Succeeded)
+        {
+            _userPortFolioMd = result.Data;
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+        await base.OnInitializedAsync();
+        _isLoaded = true;
+    }
+
+    private string RenderMarkdown(string markdown)
+    {
+        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+        return Markdown.ToHtml(markdown, pipeline);
+    }
+
+}
+

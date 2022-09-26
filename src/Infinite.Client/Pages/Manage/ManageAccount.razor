@@ -1,0 +1,18 @@
+﻿@page "/Manage-Account"
+<PageTitle>Manage Account | @ApplicationConstants.AppName</PageTitle>
+
+<MudText Typo="Typo.h4">Manage Your Profile</MudText>
+<MudTabs Color="Color.Primary" Centered ApplyEffectsToContainer Outlined Elevation="0" Rounded PanelClass="pa-6" Class="mt-2">
+    <MudTabPanel Text="PortFolio">
+        <PortFolio />
+    </MudTabPanel>
+    <MudTabPanel Text="Profile">
+        <Profile />
+    </MudTabPanel>
+    <MudTabPanel Text="Account">
+        <Account />
+    </MudTabPanel>
+    <MudTabPanel Text="Appearance">
+        <Appearance />
+    </MudTabPanel>    
+</MudTabs>
