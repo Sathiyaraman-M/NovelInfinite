@@ -1,6 +1,4 @@
-﻿@using Infinite.Client.Extensions
-@using Markdig
-@if (_isLoaded)
+﻿@if (_isLoaded)
 {
     <MudPaper Elevation="0" Outlined Class="pa-4">
         @if (string.IsNullOrEmpty(_userPortFolioMd))
@@ -10,6 +8,7 @@
                     <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
                     <div class="d-flex justify-center">
                         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
+                                   OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))" 
                                    DisableElevation Class="mt-2">
                             Create one
                         </MudButton>
@@ -19,7 +18,7 @@
         }
         else
         {
-            @((MarkupString)RenderMarkdown(_userPortFolioMd))
+            <MudMarkdown Value="@_userPortFolioMd" />
         }
     </MudPaper>
 }
@@ -32,7 +31,7 @@ else
 @code {
 
     private string _userPortFolioMd;
-    private bool _isLoaded = false;
+    private bool _isLoaded;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,12 +50,5 @@ else
         await base.OnInitializedAsync();
         _isLoaded = true;
     }
-
-    private string RenderMarkdown(string markdown)
-    {
-        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-        return Markdown.ToHtml(markdown, pipeline);
-    }
-
 }
 
