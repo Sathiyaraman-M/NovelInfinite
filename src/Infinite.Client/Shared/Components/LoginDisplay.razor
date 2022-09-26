@@ -4,7 +4,12 @@
 
 <AuthorizeView>
     <Authorized>
-        <MudLink Color="Color.Inherit" Href="authentication/profile" Class="mx-2">Hello, @(context.User.FindFirstValue(JwtClaimTypes.PreferredUserName))!</MudLink>
+        <MudTooltip Text="Manage your account">
+            <MudButton Color="Color.Inherit" Href="Personal/Manage" StartIcon="@Icons.Material.Filled.AccountCircle"
+                       Class="mx-2">
+                Hello, @(context.User.FindFirstValue(JwtClaimTypes.PreferredUserName))!
+            </MudButton>
+        </MudTooltip>
         <MudButton Color="Color.Inherit" OnClick="BeginSignOut">Log out</MudButton>
     </Authorized>
     <NotAuthorized>
