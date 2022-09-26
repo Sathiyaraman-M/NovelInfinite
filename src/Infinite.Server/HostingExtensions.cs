@@ -1,4 +1,9 @@
-﻿using Infinite.Core.Persistence;
+﻿using Infinite.Core.Features;
+using Infinite.Core.Interfaces.Repositories;
+using Infinite.Core.Interfaces.Services;
+using Infinite.Core.Persistence;
+using Infinite.Core.Repositories;
+using Infinite.Core.Services;
 using Infinite.Server.Middlewares;
 using Infinite.Shared.Configurations;
 using Infinite.Shared.Entities;
@@ -26,9 +31,10 @@ public static class HostingExtensions
                 options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
             });
         builder.Services.AddAuthorization();
+        builder.Services.ConfigureCoreServices();
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-        //builder.Services.EnableSwagger();
+        builder.Services.EnableSwagger();
         return builder.Build();
     }
 
@@ -61,19 +67,26 @@ public static class HostingExtensions
         app.MapControllers();
         app.MapFallbackToFile("index.html");
 
-        // app.UseSwagger();
-        // app.UseSwaggerUI(options =>
-        // {
-        //     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Novel Infinite");
-        //     options.DisplayRequestDuration();
-        //     options.RoutePrefix = "swagger";
-        // });
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Novel Infinite");
+            options.DisplayRequestDuration();
+            options.RoutePrefix = "swagger";
+        });
 
         return app;
     }
 
+    private static void ConfigureCoreServices(this IServiceCollection services)
+    {
+        services.AddTransient<IMailService, MailService>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+        services.AddTransient<IManageAccountService, ManageAccountService>();
+    }
 
-    private static IServiceCollection EnableSwagger(this IServiceCollection services)
+    private static void EnableSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
         {
@@ -121,6 +134,5 @@ public static class HostingExtensions
                 },
             });
         });
-        return services;
     }
 }
