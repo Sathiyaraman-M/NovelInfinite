@@ -8,8 +8,7 @@
                     <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
                     <div class="d-flex justify-center">
                         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
-                                   OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))" 
-                                   DisableElevation Class="mt-2">
+                                   Href="/Personal/Portfolio" DisableElevation Class="mt-2">
                             Create one
                         </MudButton>
                     </div>
@@ -18,6 +17,12 @@
         }
         else
         {
+            <MudToolBar Dense>
+                <MudSpacer />
+                <MudTooltip Text="Edit Portfolio">
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" DisableElevation Href="/Personal/Portfolio" />
+                </MudTooltip>
+            </MudToolBar>
             <MudMarkdown Value="@_userPortFolioMd" />
         }
     </MudPaper>
