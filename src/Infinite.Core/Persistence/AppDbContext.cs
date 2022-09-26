@@ -1,26 +1,18 @@
-﻿using Infinite.Shared.Entities;
+﻿using Duende.IdentityServer.EntityFramework.Options;
+using Infinite.Shared.Entities;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infinite.Core.Persistence;
 
-public class AppDbContext : IdentityDbContext<AppUser>
+public class AppDbContext : ApiAuthorizationDbContext<AppUser>
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options,
+        IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
     {
         
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-        builder.Entity<AppUser>().ToTable("AppUsers", "dbo");
-        builder.Entity<IdentityRole>().ToTable("AppRoles", "dbo");
-        builder.Entity<IdentityUserRole<string>>().ToTable("AppUserRoles", "dbo");
-        builder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims", "dbo");
-        builder.Entity<IdentityRoleClaim<string>>().ToTable("AppRoleClaims", "dbo");
-        builder.Ignore<IdentityUserLogin<string>>();
-        builder.Ignore<IdentityUserToken<string>>();
     }
 }

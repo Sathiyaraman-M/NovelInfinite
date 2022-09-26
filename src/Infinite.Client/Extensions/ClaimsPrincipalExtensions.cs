@@ -1,21 +1,19 @@
 ﻿using System.Security.Claims;
+using IdentityModel;
 
 namespace Infinite.Client.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
     public static string GetEmail(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+        => claimsPrincipal.FindFirstValue(JwtClaimTypes.Email);
 
     public static string GetUserName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.Name);
-
-    public static string GetFullName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue("FullName");
+        => claimsPrincipal.FindFirstValue(JwtClaimTypes.Name);
 
     public static string GetPhoneNumber(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.MobilePhone);
+        => claimsPrincipal.FindFirstValue(JwtClaimTypes.PhoneNumber);
 
     public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        => claimsPrincipal.FindFirstValue(JwtClaimTypes.Subject);
 }

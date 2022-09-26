@@ -5,6 +5,10 @@
 <MudLayout>
     <MudAppBar Dense>
         <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
+        <MudIconButton Icon="@Icons.Material.Outlined.Home" OnClick="@(() => NavigationManager.NavigateTo("/"))" 
+                       Color="Color.Inherit" />
+        <MudSpacer />
+        <LoginDisplay />
     </MudAppBar>
     <MudMainContent>
         <MudContainer Class="pt-4">
