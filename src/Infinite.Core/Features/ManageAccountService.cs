@@ -20,19 +20,19 @@ public class ManageAccountService : IManageAccountService
         {
             if (string.IsNullOrEmpty(userId))
                 throw new Exception("User not found!");
-            var portFolioMd = await _unitOfWork.GetRepository<UserProfile>().Entities
+            var portFolioMd = await _unitOfWork.GetRepository<UserPortfolio>().Entities
                 .FirstOrDefaultAsync(x => x.UserId == userId);
             if (portFolioMd != null) 
-                return await Result<string>.SuccessAsync(portFolioMd.ProfileMarkdown);
-            portFolioMd = new UserProfile()
+                return await Result<string>.SuccessAsync(portFolioMd.PortfolioMarkdown);
+            portFolioMd = new UserPortfolio()
             {
                 Id = Guid.NewGuid().ToString(),
-                ProfileMarkdown = string.Empty,
+                PortfolioMarkdown = string.Empty,
                 UserId = userId
             };
-            await _unitOfWork.GetRepository<UserProfile>().AddAsync(portFolioMd);
+            await _unitOfWork.GetRepository<UserPortfolio>().AddAsync(portFolioMd);
             await _unitOfWork.Commit();
-            return await Result<string>.SuccessAsync(portFolioMd.ProfileMarkdown);
+            return await Result<string>.SuccessAsync(portFolioMd.PortfolioMarkdown);
         }
         catch (Exception e)
         {

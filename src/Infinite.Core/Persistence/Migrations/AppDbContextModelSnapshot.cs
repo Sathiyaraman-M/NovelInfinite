@@ -246,12 +246,12 @@ namespace Infinite.Core.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Infinite.Shared.Entities.UserProfile", b =>
+            modelBuilder.Entity("Infinite.Shared.Entities.UserPortfolio", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProfileMarkdown")
+                    b.Property<string>("PortfolioMarkdown")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
@@ -432,7 +432,7 @@ namespace Infinite.Core.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Infinite.Shared.Entities.UserProfile", b =>
+            modelBuilder.Entity("Infinite.Shared.Entities.UserPortfolio", b =>
                 {
                     b.HasOne("Infinite.Shared.Entities.AppUser", "User")
                         .WithMany()

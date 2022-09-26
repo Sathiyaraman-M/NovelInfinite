@@ -15,5 +15,5 @@ public class AppDbContext : ApiAuthorizationDbContext<AppUser>
     }
     
     public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
-    public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<UserPortfolio> UserProfiles { get; set; }
 }
