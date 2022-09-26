@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
 using Infinite.Core.Features;
+using Infinite.Shared.Requests;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,19 @@ public class ManageController : ControllerBase
     {
         var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
         return Ok(await _manageAccountService.SavePortFolio(userId, model.Markdown));
+    }
+    
+    [HttpGet("profileInfo")]
+    public async Task<IActionResult> GetCurrentUserProfileInfo()
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _manageAccountService.GetUserProfileInfo(userId));
+    }
+
+    [HttpPost("profileInfo")]
+    public async Task<IActionResult> SaveCurrentUserProfileInfo(UpdateUserProfileInfoRequest request)
+    {
+        return Ok(await _manageAccountService.UpdateUserProfileInfo(request));
     }
 
     [HttpDelete("account")]

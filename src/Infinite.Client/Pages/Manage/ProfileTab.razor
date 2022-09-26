@@ -1,2 +1,79 @@
-﻿<MudText Typo="Typo.h5">Your Profile</MudText>
+﻿@using Infinite.Shared.Requests
+@using Infinite.Shared.Responses
+@using Infinite.Client.Extensions
+<MudText Typo="Typo.h5">Your Profile</MudText>
 <MudDivider Light Class="my-2" />
+@if (_loaded)
+{
+    <EditForm Model="Model" OnValidSubmit="SubmitAsync">
+        <MudTextField T="string" ReadOnly @bind-Value="Model.Email" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Email"/>
+        <MudTextField T="string" @bind-Value="Model.Name" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Name"/>
+        <MudTextField T="string" @bind-Value="Model.FullName" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Full Name"/>
+        <MudTextField T="string" @bind-Value="Model.Mobile" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Mobile"/>
+        <MudTextField T="string" @bind-Value="Model.City" Variant="Variant.Outlined" Margin="Margin.Dense" Label="City"/>
+        <MudTextField T="string" @bind-Value="Model.Country" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Country"/>
+        <MudTextField T="string" @bind-Value="Model.AboutMe" Variant="Variant.Outlined" Margin="Margin.Dense" Label="About Me"/>
+        <MudTextField T="string" @bind-Value="Model.Status" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Status"/>
+        <MudToolBar>
+            <MudSpacer />
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" DisableElevation ButtonType="ButtonType.Submit">Save Details</MudButton>
+        </MudToolBar>
+    </EditForm>
+}
+else
+{
+    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+}
+
+@code
+{
+    private UpdateUserProfileInfoRequest Model { get; set; } = new();
+    private bool _loaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await HttpClient.GetFromJsonAsync<Result<UserProfileInfoResponse>>("api/manage/profileInfo");
+        if (result!.Succeeded)
+        {
+            var response = result.Data;
+            Model = new UpdateUserProfileInfoRequest()
+            {
+                Email = response.Email,
+                AboutMe = response.AboutMe,
+                City = response.City,
+                Country = response.City,
+                DateOfBirth = response.DateOfBirth,
+                FullName = response.FullName,
+                Name = response.Name,
+                Status = response.Status
+            };
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+        await base.OnInitializedAsync();
+        _loaded = true;
+    }
+
+    private async Task SubmitAsync()
+    {
+        var response = await HttpClient.PostAsJsonAsync("api/manage/profileInfo", Model);
+        var result = await response.ToResult();
+        if (result.Succeeded)
+        {
+            Snackbar.Add("Updated Profile Info successfully!");
+            NavigationManager.NavigateTo("/Personal");
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+        }
+    }
+}
