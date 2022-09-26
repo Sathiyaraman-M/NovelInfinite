@@ -1,8 +1,6 @@
 ﻿using Duende.IdentityServer.EntityFramework.Options;
 using Infinite.Shared.Entities;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -15,4 +13,7 @@ public class AppDbContext : ApiAuthorizationDbContext<AppUser>
     {
         
     }
+    
+    public DbSet<UserProfileInfo> UserProfileInfos { get; set; }
+    public DbSet<UserProfile> UserProfiles { get; set; }
 }
