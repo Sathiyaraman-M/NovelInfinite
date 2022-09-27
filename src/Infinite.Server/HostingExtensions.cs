@@ -30,6 +30,32 @@ public static class HostingExtensions
             {
                 options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                 options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            })
+            .AddGitHub(options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
+                options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
+                // options.Scope.Add("read:user");
+                // options.SaveTokens = true;
+                //
+                // options.ClaimActions.MapJsonKey(JwtClaimTypes.Subject, "id");
+                // options.ClaimActions.MapJsonKey(JwtClaimTypes.Name, "name");
+                // options.ClaimActions.MapJsonKey("urn:github:login", "login");
+                // options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
+                // options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
+                // options.Events = new OAuthEvents
+                // {
+                //     OnCreatingTicket = async context =>
+                //     {
+                //         var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                //         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+                //         var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+                //         response.EnsureSuccessStatusCode();
+                //         var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                //         context.RunClaimActions(json.RootElement);
+                //     }
+                // };
             });
         builder.Services.AddAuthorization();
         builder.Services.ConfigureCoreServices();
@@ -86,6 +112,7 @@ public static class HostingExtensions
         services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
         services.AddTransient<IManageAccountService, ManageAccountService>();
         services.AddTransient<IBlogService, BlogService>();
+        services.AddTransient<IBlogDraftService, BlogDraftService>();
     }
 
     private static void EnableSwagger(this IServiceCollection services)
