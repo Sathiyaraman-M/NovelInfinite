@@ -12,4 +12,5 @@ public class Blog : IEntity<string>
     public string Markdown { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime LastEditedDate { get; set; }
+    public Visibility Visibility { get; set; }
 }
