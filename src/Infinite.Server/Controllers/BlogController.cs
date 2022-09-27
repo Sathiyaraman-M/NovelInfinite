@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
 using Infinite.Core.Features;
+using Infinite.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +26,16 @@ public class BlogController : ControllerBase
         return Ok(await _blogService.GetMyLast4Blogs(userId));
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id}/personal")]
     public async Task<IActionResult> GetFullBlog(string id)
     {
         return Ok(await _blogService.GetFullBlog(id));
+    }
+
+    [HttpPost("personal")]
+    public async Task<IActionResult> CreateNewBlogPersonal(Blog blog)
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogService.CreateBlog(blog, userId));
     }
 }

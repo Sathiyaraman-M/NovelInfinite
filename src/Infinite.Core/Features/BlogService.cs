@@ -47,10 +47,17 @@ public class BlogService : IBlogService
         }
     }
 
-    public async Task<IResult> CreateBlog(Blog blog)
+    public async Task<IResult> CreateBlog(Blog blog, string userId)
     {
         try
         {
+            blog.Id = Guid.NewGuid().ToString();
+            blog.UserId = userId;
+            if (string.IsNullOrEmpty(blog.Title))
+                throw new Exception("Please enter blog title");
+            if (string.IsNullOrEmpty(blog.Markdown))
+                throw new Exception("Please add some content in the blog. Empty blog cannot be posted");
+            await _unitOfWork.GetRepository<Blog>().AddAsync(blog);
             await _unitOfWork.Commit();
             return await Result.SuccessAsync();
         }
