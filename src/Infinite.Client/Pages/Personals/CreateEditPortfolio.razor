@@ -3,8 +3,9 @@
 @layout EditorLayout
 <PageTitle>Your Portfolio | @ApplicationConstants.AppName</PageTitle>
 <MudAppBar Dense>
-    <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
-    <MudSpacer />
+    <MudIconButton Edge="Edge.Start" Icon="@Icons.Material.Filled.ArrowBack" Color="Color.Inherit" Href="/Personal/Manage" />
+    <MudText Typo="Typo.h5" Class="ml-2">@ApplicationConstants.AppName</MudText>
+    <MudSpacer/>
     @if (_isLoaded)
     {
         if (!_isEdit)
@@ -17,7 +18,7 @@
         }
     }
     <MudText></MudText>
-    <MudSpacer />
+    <MudSpacer/>
     <MudButton StartIcon="@Icons.Material.Filled.Save" Color="Color.Inherit" OnClick="SaveAsync">Save</MudButton>
 </MudAppBar>
 <MudMainContent>
