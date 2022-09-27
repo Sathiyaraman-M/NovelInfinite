@@ -13,7 +13,7 @@
                     <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
                     <div class="d-flex justify-center">
                         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
-                                   OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))" 
+                                   Href="/Personal/Portfolio" 
                                    DisableElevation Class="mt-2">
                             Create one
                         </MudButton>
@@ -35,7 +35,7 @@ else
     <MudText Typo="Typo.h5">Your Projects</MudText>
     <MudSpacer/>
     <MudTooltip Text="Add Project">
-        <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Project/New"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Projects/New"/>
     </MudTooltip>
 </MudToolBar>
 <MudDivider Light Class="my-2" />
@@ -45,7 +45,7 @@ else
         <MudText Typo="Typo.h5">Your Blogs</MudText>
         <MudSpacer/>
         <MudTooltip Text="Add Blog">
-            <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Blog/New"/>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Blogs/New"/>
         </MudTooltip>
     </MudToolBar>
     <MudDivider Light Class="my-2" />
