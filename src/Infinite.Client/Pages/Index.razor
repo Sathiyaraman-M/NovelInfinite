@@ -1,15 +1,64 @@
 ﻿@page "/"
 
 <PageTitle>Index</PageTitle>
-
-<MudText Typo="Typo.h6">Welcome To Index</MudText>
-<MudText>Claims</MudText>
-
 <AuthorizeView>
-    <Authorized>
-        @foreach (var claim in context.User.Claims)
+    <MudText Typo="Typo.h4">Welcome @context.User.Identity?.Name!</MudText>
+    <MudText Typo="Typo.body1">This page is intended to show personalised feed</MudText>
+    <MudDivider Light Class="my-4" />
+    <MudText Typo="Typo.h5">Your saved drafts</MudText>
+    <div class="d-flex mt-4" style="overflow: scroll">
+        @for (var i = 0; i < 4; i++)
         {
-            <MudText>@claim.Type @claim.Value</MudText>
+            <MudCard Class="pa-2 mx-2" Outlined Elevation="0">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">Sample Draft</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">This is an incomplete draft.</MudText>
+                    <MudText Typo="Typo.body1">Come back to finish and publish it.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Draft</MudButton>
+                </MudCardActions>
+            </MudCard>
         }
-    </Authorized>
+    </div>
+    <MudDivider Light Class="my-4" />
+    <MudText Typo="Typo.h5">Your Blogs</MudText>
+    <div class="d-flex mt-4" style="overflow: scroll">
+        @for (var i = 0; i < 4; i++)
+        {
+            <MudCard Class="pa-2 mx-2" Outlined Elevation="0">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">Your Sample Blog</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">This is your latest blog.</MudText>
+                    <MudText Typo="Typo.body1">Have galance.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Blog</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+    </div>
+    <MudDivider Light Class="my-4" />
+    <MudText Typo="Typo.h5">Explore projects</MudText>
+    <div class="d-flex mt-4" style="overflow: scroll">
+        @for (var i = 0; i < 4; i++)
+        {
+            <MudCard Class="pa-2 mx-2" Outlined Elevation="0">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">Sample Project</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">This is an interesting project.</MudText>
+                    <MudText Typo="Typo.body1">Come and have a look at it.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Project</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+    </div>
 </AuthorizeView>
