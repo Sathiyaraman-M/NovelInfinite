@@ -26,10 +26,18 @@ public class BlogController : ControllerBase
         return Ok(await _blogService.GetMyLast4Blogs(userId));
     }
     
-    [HttpGet("{id}/personal")]
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecentBlogsFromAuthor(string id, int n = 4)
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogService.GetLastNBlogs(userId, id != userId, n));
+    }
+    
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetFullBlog(string id)
     {
-        return Ok(await _blogService.GetFullBlog(id));
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogService.GetFullBlog(id, userId));
     }
 
     [HttpPost("personal")]

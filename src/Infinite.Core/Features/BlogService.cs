@@ -1,6 +1,9 @@
-﻿using Infinite.Core.Interfaces.Repositories;
+﻿using Infinite.Core.Extensions;
+using Infinite.Core.Interfaces.Repositories;
 using Infinite.Shared.Entities;
+using Infinite.Shared.Enums;
 using Infinite.Shared.Wrapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infinite.Core.Features;
@@ -8,13 +11,20 @@ namespace Infinite.Core.Features;
 public class BlogService : IBlogService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<AppUser> _userManager;
 
-    public BlogService(IUnitOfWork unitOfWork)
+    public BlogService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager)
     {
         _unitOfWork = unitOfWork;
+        _userManager = userManager;
     }
 
     public async Task<IResult<List<Blog>>> GetMyLast4Blogs(string userId)
+    {
+        return await GetLastNBlogs(userId, false, 4);
+    }
+
+    public async Task<IResult<List<Blog>>> GetLastNBlogs(string userId, bool isOnlyPublic, int n)
     {
         try
         {
@@ -22,6 +32,7 @@ public class BlogService : IBlogService
                 throw new Exception("User not found!");
             var blogs = await _unitOfWork.GetRepository<Blog>().Entities
                                                     .Where(x => x.UserId == userId)
+                                                    .WhereIf(isOnlyPublic, x => x.Visibility == Visibility.Public)
                                                     .OrderByDescending(x => x.CreatedDate)
                                                     .Take(4)
                                                     .ToListAsync();
@@ -32,13 +43,16 @@ public class BlogService : IBlogService
         {
             return await Result<List<Blog>>.FailAsync(e.Message);
         }
+        
     }
 
-    public async Task<IResult<Blog>> GetFullBlog(string id)
+    public async Task<IResult<Blog>> GetFullBlog(string id, string userId)
     {
         try
         {
             var blog = await _unitOfWork.GetRepository<Blog>().GetByIdAsync(id);
+            if (blog.UserId != userId && blog.Visibility == Visibility.Private)
+                throw new Exception("Cannot access the requested blog");
             return await Result<Blog>.SuccessAsync(blog);
         }
         catch (Exception e)
@@ -53,6 +67,8 @@ public class BlogService : IBlogService
         {
             blog.Id = Guid.NewGuid().ToString();
             blog.UserId = userId;
+            blog.AuthorName = (await _userManager.FindByIdAsync(userId)).UserName;
+            blog.CreatedDate = DateTime.Now;
             if (string.IsNullOrEmpty(blog.Title))
                 throw new Exception("Please enter blog title");
             if (string.IsNullOrEmpty(blog.Markdown))
