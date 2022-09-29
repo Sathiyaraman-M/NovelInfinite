@@ -2,7 +2,7 @@
 @using Infinite.Shared.Entities
 <PageTitle>Personal | @ApplicationConstants.AppName</PageTitle>
 <MudText Typo="Typo.h5">Personal Info</MudText>
-<MudDivider Light Class="my-2" />
+<MudDivider Light Class="my-2"/>
 @if (_isMdLoaded)
 {
     <MudPaper Outlined Elevation="0" Class="pa-4">
@@ -13,8 +13,7 @@
                     <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
                     <div class="d-flex justify-center">
                         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
-                                   Href="/Personal/Portfolio" 
-                                   DisableElevation Class="mt-2">
+                                   Href="/Personal/Portfolio" DisableElevation Class="mt-2">
                             Create one
                         </MudButton>
                     </div>
@@ -23,13 +22,13 @@
         }
         else
         {
-            <MudMarkdown Value="@_userPortFolioMd" />
+            <MudMarkdown Value="@_userPortFolioMd"/>
         }
     </MudPaper>
 }
 else
 {
-    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+    <MudProgressLinear Indeterminate Color="Color.Secondary"/>
 }
 <MudToolBar>
     <MudText Typo="Typo.h5">Your Projects</MudText>
@@ -38,7 +37,7 @@ else
         <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Projects/New"/>
     </MudTooltip>
 </MudToolBar>
-<MudDivider Light Class="my-2" />
+<MudDivider Light Class="my-2"/>
 @if (_isBlogsLoaded)
 {
     <MudToolBar>
@@ -48,25 +47,30 @@ else
             <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Blogs/New"/>
         </MudTooltip>
     </MudToolBar>
-    <MudDivider Light Class="my-2" />
-    <MudGrid>
+    <div class="d-flex flex-nowrap py-4" style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap">
         @foreach (var blog in _myLast4Blogs)
         {
-            <MudItem xs="12" sm="6" md="4" lg="3">
+            <div class="me-2" style="display: inline-block; min-width: 400px;">
                 <a href=@($"/Blog/{blog.Id}")>
-                    <MudCard Class="pa-4">
-                        <MudText Typo="Typo.h6">@blog.Title</MudText>
-                        <MudText Typo="Typo.caption">@blog.AuthorName</MudText>
-                        <MudText Typo="Typo.body1">@blog.CreatedDate</MudText>
+                    <MudCard Class="pa-2" Outlined Elevation="0">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">@blog.Title</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText Typo="Typo.caption">@blog.CreatedDate.ToLongDateString()</MudText>
+                            <MudText Typo="Typo.body1">This is your latest blog.</MudText>
+                            <MudText Typo="Typo.body1">Have a glance.</MudText>
+                        </MudCardContent>
                     </MudCard>
                 </a>
-            </MudItem>
+            </div>
         }
-    </MudGrid>
+    </div>
+    <MudDivider Light Class="my-2"/>
 }
 else
 {
-    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+    <MudProgressLinear Indeterminate Color="Color.Secondary"/>
 }
 
 @code {
@@ -83,7 +87,7 @@ else
         _isMdLoaded = true;
         _isBlogsLoaded = true;
     }
-    
+
     private async Task LoadPortfolio()
     {
         var portfolioResult = await HttpClient.GetFromJsonAsync<Result<string>>("api/manage/portfolio");
@@ -103,7 +107,6 @@ else
     private async Task LoadLatestBlogs()
     {
         var blogsResult = await HttpClient.GetFromJsonAsync<Result<List<Blog>>>("api/blog/my-last-four");
-        
         if (blogsResult!.Succeeded)
         {
             _myLast4Blogs = blogsResult.Data;
@@ -116,4 +119,5 @@ else
             }
         }
     }
+
 }

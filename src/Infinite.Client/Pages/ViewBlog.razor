@@ -1,0 +1,74 @@
+﻿@page "/Blog/{Id:guid}"
+@using Infinite.Shared.Entities
+@if (Blog is not null)
+{
+    <PageTitle>@Blog.Title | @ApplicationConstants.AppName</PageTitle>
+    <MudText Typo="Typo.h5">@Blog.Title</MudText>
+    <MudToolBar>
+        <MudText>@Blog.AuthorName</MudText>
+        <MudText Typo="Typo.caption">Created on @Blog.CreatedDate.ToString("dd/MM/yyyy")</MudText>
+        <MudSpacer />
+        <MudToggleIconButton T="bool" Icon="@Icons.Material.Outlined.BookmarkAdd" Color="Color.Default" 
+                             ToggledIcon="@Icons.Material.Filled.BookmarkAdded" ToggledColor="Color.Secondary" />
+    </MudToolBar>
+    <MudDivider Light Class="my-2" />
+    <MudMarkdown Value="@Blog.Markdown" />
+    <MudDivider Light Class="my-2" />
+    <MudText Typo="Typo.h6">More from the author</MudText>
+    @if (RecentFromAuthor != null)
+    {
+        @foreach (var blog in RecentFromAuthor)
+        {
+            <div class="me-2" style="display: inline-block; min-width: 400px;">
+                <MudCard Class="pa-2" Outlined Elevation="0">
+                    <MudCardHeader>
+                        <MudText Typo="Typo.h6">@blog.Title</MudText>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1">This is your latest blog.</MudText>
+                        <MudText Typo="Typo.body1">Have a glance.</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation
+                                   Href="@($"/blog/{blog.Id}")">Go to Blog</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </div>
+        }
+    }
+}
+else
+{
+    <MudProgressLinear Indeterminate Color="Color.Secondary" />
+}
+
+@code 
+{
+    [Parameter]
+    public Guid Id { get; set; }
+    private Blog Blog { get; set; }
+    private List<Blog> RecentFromAuthor { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await HttpClient.GetFromJsonAsync<Result<Blog>>($"api/blog/{Id}");
+        if (result!.Succeeded)
+        {
+            Blog = result.Data;
+            var recentResult = await HttpClient.GetFromJsonAsync<Result<List<Blog>>>($"api/blog/recent?id={Id}");
+            if (recentResult!.Succeeded)
+            {
+                RecentFromAuthor = recentResult.Data;
+            }
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                Snackbar.Add(message, Severity.Error);
+            }
+            NavigationManager.NavigateTo("/Explore");
+        }
+        await base.OnInitializedAsync();
+    }
+}
