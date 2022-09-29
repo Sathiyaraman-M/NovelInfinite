@@ -1,4 +1,6 @@
-﻿using Infinite.Shared.Wrapper;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using Infinite.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infinite.Core.Extensions;
@@ -14,5 +16,10 @@ public static class QueryableExtensions
         pageNumber = pageNumber <= 0 ? 1 : pageNumber;
         var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         return PaginatedResult<T>.Success(items, count, pageNumber, pageSize);
+    }
+
+    public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, bool condition, Expression<Func<TSource, bool>> predicate)
+    {
+        return condition ? query.Where(predicate) : query;
     }
 }
