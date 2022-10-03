@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Server", "Infinite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Shared", "Infinite.Shared\Infinite.Shared.csproj", "{8432C52E-6797-47A2-B261-74B571E27C5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infinite.Client.Components", "Infinite.Client.Components\Infinite.Client.Components.csproj", "{34F6B899-A033-4320-9CF9-042480AB8C17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{8432C52E-6797-47A2-B261-74B571E27C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8432C52E-6797-47A2-B261-74B571E27C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8432C52E-6797-47A2-B261-74B571E27C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34F6B899-A033-4320-9CF9-042480AB8C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34F6B899-A033-4320-9CF9-042480AB8C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34F6B899-A033-4320-9CF9-042480AB8C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34F6B899-A033-4320-9CF9-042480AB8C17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
