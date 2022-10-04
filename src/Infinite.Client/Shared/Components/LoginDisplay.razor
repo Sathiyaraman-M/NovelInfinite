@@ -4,21 +4,21 @@
 
 <AuthorizeView>
     <Authorized>
-        <MudTooltip Text="Manage your account">
-            <MudButton Color="Color.Inherit" Href="Personal/Manage" StartIcon="@Icons.Material.Filled.AccountCircle"
-                       Class="mx-2">
-                Hello, @(context.User.FindFirstValue(JwtClaimTypes.PreferredUserName))!
-            </MudButton>
-        </MudTooltip>
-        <MudButton Color="Color.Inherit" OnClick="BeginSignOut">Log out</MudButton>
+        <a href="Personal/Settings" class="text-white">
+            Hello, @(context.User.FindFirstValue(JwtClaimTypes.PreferredUserName))!
+        </a>
+        <Button OnClick="BeginSignOut" BackgroundColor="TablerColor.Light" class="ms-2">Log out</Button>
     </Authorized>
     <NotAuthorized>
-        <MudLink Color="Color.Inherit" Href="authentication/login">Log in</MudLink>
+        <Button OnClick="@(() => NavigationManager.NavigateTo("authentication/login"))"
+                BackgroundColor="TablerColor.Light">
+            Log in
+        </Button>
     </NotAuthorized>
 </AuthorizeView>
 
 @code{
-    private async Task BeginSignOut(MouseEventArgs args)
+    private async Task BeginSignOut()
     {
         await SignOutManager.SetSignOutState();
         NavigationManager.NavigateTo("authentication/logout");
