@@ -1,83 +1,145 @@
 ﻿@page "/Personal"
 @using Infinite.Shared.Entities
-<PageTitle>Personal | @ApplicationConstants.AppName</PageTitle>
-<MudText Typo="Typo.h5">Personal Info</MudText>
-<MudDivider Light Class="my-2"/>
-@if (_isMdLoaded)
-{
-    <MudPaper Outlined Elevation="0" Class="pa-4">
-        @if (string.IsNullOrEmpty(_userPortFolioMd))
-        {
-            <div class="d-flex justify-center">
-                <div class="d-flex flex-column">
-                    <MudText Typo="Typo.body1">Looks like you haven't created a portfolio yet!</MudText>
-                    <div class="d-flex justify-center">
-                        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Add"
-                                   Href="/Personal/Portfolio" DisableElevation Class="mt-2">
-                            Create one
-                        </MudButton>
+@using Markdig
+<PageContent PageTitle="Personal Info">
+    <ChildContent>
+        <div class="d-flex justify-content-between my-2">
+            <h1>Your Portfolio</h1>
+            <div class="d-flex">
+                <Button BackgroundColor="TablerColor.White"
+                        OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))">
+                    <Icon IconType="TablerIcons.Pencil" class="me-1"/>
+                    Edit
+                </Button>
+                <Button BackgroundColor="TablerColor.White" class="ms-2"
+                        OnClick="@(() => NavigationManager.NavigateTo("/Personal/Settings"))">
+                    <Icon IconType="TablerIcons.Settings" class="me-1"/>
+                    Settings
+                </Button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                @if (_isMdLoaded)
+                {
+                    @if (string.IsNullOrEmpty(_userPortFolioMd))
+                    {
+                        <div class="w-100 d-flex justify-center">
+                            <div class="w-100 d-flex flex-column align-items-center">
+                                <h3>Looks like you haven't created a portfolio yet!</h3>
+                                <div class="d-flex justify-center">
+                                    <Button BackgroundColor="TablerColor.Cyan" class="mt-1"
+                                            OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))">
+                                        <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                                        Create One
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @(new MarkupString(Markdown.ToHtml(_userPortFolioMd, Pipeline)))
+                    }
+                }
+                else
+                {
+                    <Progress Size="ProgressSize.Small" Indeterminate Color="TablerColor.Secondary"></Progress>
+                }
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="d-flex justify-content-between my-2">
+                <h2>Your Projects</h2>
+                <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2"
+                        OnClick="@(() => NavigationManager.NavigateTo("/Personal/Projects/New"))">
+                    <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                    Add Project
+                </Button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="w-100 d-flex justify-center">
+                        <div class="w-100 d-flex flex-column align-items-center">
+                            <h3>Looks like you haven't added any project yet!</h3>
+                            <div class="d-flex justify-center">
+                                <Button BackgroundColor="TablerColor.Cyan" class="mt-1"
+                                        OnClick="@(() => NavigationManager.NavigateTo("/Personal/Projects/New"))">
+                                    <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                                    Add one
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <MudMarkdown Value="@_userPortFolioMd"/>
-        }
-    </MudPaper>
-}
-else
-{
-    <MudProgressLinear Indeterminate Color="Color.Secondary"/>
-}
-<MudToolBar>
-    <MudText Typo="Typo.h5">Your Projects</MudText>
-    <MudSpacer/>
-    <MudTooltip Text="Add Project">
-        <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Projects/New"/>
-    </MudTooltip>
-</MudToolBar>
-<MudDivider Light Class="my-2"/>
-@if (_isBlogsLoaded)
-{
-    <MudToolBar>
-        <MudText Typo="Typo.h5">Your Blogs</MudText>
-        <MudSpacer/>
-        <MudTooltip Text="Add Blog">
-            <MudIconButton Icon="@Icons.Material.Filled.Add" DisableElevation Href="/Personal/Blogs/New"/>
-        </MudTooltip>
-    </MudToolBar>
-    <div class="d-flex flex-nowrap py-4" style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap">
-        @foreach (var blog in _myLast4Blogs)
-        {
-            <div class="me-2" style="display: inline-block; min-width: 400px;">
-                <a href=@($"/Blog/{blog.Id}")>
-                    <MudCard Class="pa-2" Outlined Elevation="0">
-                        <MudCardHeader>
-                            <MudText Typo="Typo.h6">@blog.Title</MudText>
-                        </MudCardHeader>
-                        <MudCardContent>
-                            <MudText Typo="Typo.caption">@blog.CreatedDate.ToLongDateString()</MudText>
-                            <MudText Typo="Typo.body1">This is your latest blog.</MudText>
-                            <MudText Typo="Typo.body1">Have a glance.</MudText>
-                        </MudCardContent>
-                    </MudCard>
-                </a>
+        </div>
+        <div class="mt-4">
+            <div class="d-flex justify-content-between my-2">
+                <h2>Your Blogs</h2>
+                <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2"
+                        OnClick="@(() => NavigationManager.NavigateTo("/Personal/Blogs/New"))">
+                    <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                    New Blog
+                </Button>
             </div>
-        }
-    </div>
-    <MudDivider Light Class="my-2"/>
-}
-else
-{
-    <MudProgressLinear Indeterminate Color="Color.Secondary"/>
-}
+            @if (_isBlogsLoaded)
+            {
+                if (_myLast4Blogs.Count == 0)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="w-100 d-flex justify-center">
+                                <div class="w-100 d-flex flex-column align-items-center">
+                                    <h3>Looks like you haven't added any blog yet!</h3>
+                                    <div class="d-flex justify-center">
+                                        <Button BackgroundColor="TablerColor.Cyan" class="mt-1"
+                                                OnClick="@(() => NavigationManager.NavigateTo("/Personal/Blogs/New"))">
+                                            <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                                            Add one
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var blog in _myLast4Blogs)
+                        {
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <a class="card" href="@($"/Blog/{blog.Id}")">
+                                    <div class="card-status-top bg-cyan"></div>
+                                    <CardHeader>
+                                        <CardTitle>@blog.Title</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <h5>@blog.AuthorName</h5>
+                                        <p>@blog.CreatedDate.ToShortDateString()</p>
+                                    </CardBody>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <Progress Size="ProgressSize.Small" Indeterminate Color="TablerColor.Secondary"></Progress>
+            }
+        </div>
+    </ChildContent>
+</PageContent>
 
 @code {
     private string _userPortFolioMd;
     private List<Blog> _myLast4Blogs = new();
     private bool _isMdLoaded;
     private bool _isBlogsLoaded;
+
+    private MarkdownPipeline Pipeline => new MarkdownPipelineBuilder().UseAdvancedExtensions().UseEmojiAndSmiley().Build();
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,7 +161,7 @@ else
         {
             foreach (var message in portfolioResult.Messages)
             {
-                Snackbar.Add(message, Severity.Error);
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
             }
         }
     }
@@ -115,7 +177,7 @@ else
         {
             foreach (var message in blogsResult.Messages)
             {
-                Snackbar.Add(message, Severity.Error);
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
             }
         }
     }
