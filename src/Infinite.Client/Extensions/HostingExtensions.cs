@@ -26,5 +26,6 @@ public static class HostingExtensions
     {
         services.AddHttpClient("Infinite.ServerAPI", client => client.BaseAddress = new Uri(baseAddress)).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
         services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Infinite.ServerAPI"));
+        services.AddHttpClient<PublicHttpClient>(client => client.BaseAddress = new Uri(baseAddress));
     }
 }
