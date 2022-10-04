@@ -1,7 +1,4 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider @bind-IsDarkMode="AppearanceService.IsDarkMode" Theme="AppearanceService.AppTheme" />
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-<MudLayout>
-    @Body
-</MudLayout>
+<ModalContainer />
+<ToastContainer />
+@Body

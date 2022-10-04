@@ -1,25 +1,30 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider @bind-IsDarkMode="AppearanceService.IsDarkMode" Theme="AppearanceService.AppTheme" />
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-<MudLayout>
-    <MudAppBar Dense>
-        <MudText Typo="Typo.h5">@ApplicationConstants.AppName</MudText>
-        <MudButton Href="/" Color="Color.Inherit" StartIcon="@Icons.Material.Rounded.Home" Class="ml-4">
-            Home
-        </MudButton>
-        <MudButton Href="/Personal" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.MyLocation" Class="ml-2">
-            Personal
-        </MudButton>
-        <MudButton Href="/Explore" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Explore" Class="ml-2">
-            Explore
-        </MudButton>
-        <MudSpacer />
-        <LoginDisplay />
-    </MudAppBar>
-    <MudMainContent>
-        <MudContainer Class="pt-4" Style="margin-bottom: 50px">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+<ModalContainer />
+<ToastContainer />
+<div class="page">
+    <header class="navbar navbar-expand-md d-print-none navbar-dark sticky-top">
+        <div class="container-xl">
+            <h1 class="navbar-brand text-white">NOVEL INFINITE</h1>
+            <button class="navbar-toggler" type="button" data-toggle="#navbar" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse ms-2" id="navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Home</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/Personal">Personal</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/Explore">Explore</NavLink>
+                    </li>
+                </ul>
+                <div class="ms-auto">
+                    <LoginDisplay />
+                </div>
+            </div>
+        </div>
+    </header>
+    @Body
+</div>
