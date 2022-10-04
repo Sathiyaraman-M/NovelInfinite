@@ -1,70 +1,52 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
 <AuthorizeView>
-    <MudText Typo="Typo.h4">Welcome @context.User.Identity?.Name!</MudText>
-    <MudText Typo="Typo.body1">This page is intended to show personalised feed</MudText>
-    <MudDivider Light Class="my-4"/>
-    <MudText Typo="Typo.h5">Your saved drafts</MudText>
-    <div class="d-flex flex-nowrap py-4" style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap">
-        @for (var i = 0; i < 16; i++)
-        {
-            <div class="me-2" style="display: inline-block; min-width: 400px;">
-                <MudCard Class="pa-2" Outlined Elevation="0">
-                    <MudCardHeader>
-                        <MudText Typo="Typo.h6">Sample Draft</MudText>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body1">This is an incomplete draft.</MudText>
-                        <MudText Typo="Typo.body1">Come back to finish and publish it.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Draft</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </div>
-        }
-    </div>
-    <MudDivider Light Class="my-4"/>
-    <MudText Typo="Typo.h5">Your Blogs</MudText>
-    <div class="d-flex flex-nowrap py-4" style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap">
-        @for (var i = 0; i < 8; i++)
-        {
-            <div class="me-2" style="display: inline-block; min-width: 400px;">
-                <MudCard Class="pa-2" Outlined Elevation="0">
-                    <MudCardHeader>
-                        <MudText Typo="Typo.h6">Your Sample Blog</MudText>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body1">This is your latest blog.</MudText>
-                        <MudText Typo="Typo.body1">Have galance.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Blog</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </div>
-        }
-    </div>
-    <MudDivider Light Class="my-4"/>
-    <MudText Typo="Typo.h5">Explore projects</MudText>
-    <div class="d-flex flex-nowrap py-4" style="overflow-x: scroll; overflow-y: hidden; white-space: nowrap">
-        @for (var i = 0; i < 4; i++)
-        {
-            <div class="me-2" style="display: inline-block; min-width: 400px;">
-                <MudCard Class="pa-2" Outlined Elevation="0">
-                    <MudCardHeader>
-                        <MudText Typo="Typo.h6">Sample Project</MudText>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body1">This is an interesting project.</MudText>
-                        <MudText Typo="Typo.body1">Come and have a look at it.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Color="Color.Tertiary" Variant="Variant.Filled" DisableElevation>Go to Project</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </div>
-        }
-    </div>
+    <PageContent PageTitle="Home">
+        <ChildContent>
+            <h1 class="mb-3">@($"Welcome {context.User.Identity?.Name}!")</h1>
+            <CustomCarousel Id="sample1" T="int" Items="Enumerable.Range(1, 16).ToList()" VisibleSlideCount="4" Title="Your Saved Drafts">
+                <CardTemplate Context="card">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                Active User @card
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            Sample Card
+                        </CardBody>
+                    </Card>
+                </CardTemplate>
+            </CustomCarousel>
+            <CustomCarousel Id="sample2" T="int" Items="Enumerable.Range(1, 16).ToList()" VisibleSlideCount="4" Title="Your Blogs">
+                <CardTemplate Context="card">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                Sample Blog @card
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <p>This is your latest blog.</p>
+                            <p>Have a glance.</p>
+                        </CardBody>
+                    </Card>
+                </CardTemplate>
+            </CustomCarousel>
+            <CustomCarousel Id="sample3" T="int" Items="Enumerable.Range(1, 16).ToList()" VisibleSlideCount="4" Title="Your Projects">
+                <CardTemplate Context="card">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                Sample Project @card
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <p>This is a good project.</p>
+                        </CardBody>
+                    </Card>
+                </CardTemplate>
+            </CustomCarousel>
+        </ChildContent>
+    </PageContent>
 </AuthorizeView>
