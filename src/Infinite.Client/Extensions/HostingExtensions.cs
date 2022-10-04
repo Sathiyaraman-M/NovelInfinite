@@ -1,4 +1,4 @@
-﻿using Infinite.Client.Services;
+﻿using Infinite.Client.Services.HttpClients;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using TabBlazor;
