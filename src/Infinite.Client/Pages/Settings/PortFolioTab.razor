@@ -1,0 +1,63 @@
+﻿@using Markdig
+@if (_isLoaded)
+{
+    <div class="pa-2">
+        @if (string.IsNullOrEmpty(_userPortFolioMd))
+        {
+            <div class="w-100 d-flex justify-center">
+                <div class="w-100 d-flex flex-column align-items-center">
+                    <h3>Looks like you haven't created a portfolio yet!</h3>
+                    <div class="d-flex justify-center">
+                        <Button BackgroundColor="TablerColor.Cyan" class="mt-1"
+                                OnClick="@(() => NavigationManager.NavigateTo("/Personal/Portfolio"))">
+                            <Icon IconType="TablerIcons.Plus" class="me-1" />
+                            Create One
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex py-2 flex-row-reverse">
+                <Button BackgroundColor="TablerColor.Light" OnClick="@(() => NavigationManager.NavigateTo("Personal/Portfolio"))">
+                    <Icon IconType="TablerIcons.Pencil" class="me-1" />
+                    Edit
+                </Button>
+            </div>
+            @(new MarkupString(Markdown.ToHtml(_userPortFolioMd, Pipeline)))
+        }
+    </div>
+}
+else
+{
+    <Progress Indeterminate Color="TablerColor.Secondary" Size="ProgressSize.Small"/>
+}
+
+
+@code {
+
+    private string _userPortFolioMd;
+    private bool _isLoaded;
+
+    private MarkdownPipeline Pipeline => new MarkdownPipelineBuilder().UseAdvancedExtensions().UseEmojiAndSmiley().Build();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>("api/manage/portfolio");
+        if (result!.Succeeded)
+        {
+            _userPortFolioMd = result.Data;
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Error", "PortFolio", message));
+            }
+        }
+        await base.OnInitializedAsync();
+        _isLoaded = true;
+    }
+
+}

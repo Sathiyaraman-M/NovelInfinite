@@ -1,0 +1,28 @@
+﻿@using Infinite.Client.Extensions
+@inject SignOutSessionStateManager SignOutSessionStateManager
+<h2>Delete your account permanently</h2>
+<p>Doing so, you wil permanently lose access to your account and also removes all your personal info, projects and blogs from Infinite.</p>
+<Button BackgroundColor="TablerColor.Danger" OnClick="DeleteInfiniteAccount">Delete Account</Button>
+
+@code
+{
+    private async Task DeleteInfiniteAccount()
+    {
+        var response = await HttpClient.DeleteAsync("api/manage/account");
+        var result = await response.ToResult();
+        if (result.Succeeded)
+        {
+            await ToastService.AddToastAsync(new ToastModel("Success", "Permanent Account Deletion", "Your account is now permanently deleted from Infinite's Database"));
+            await SignOutSessionStateManager.SetSignOutState();
+            NavigationManager.NavigateTo("authentication/logout");
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Error", "Permanent Account Deletion", message));
+            }
+        }
+    }
+    
+}
