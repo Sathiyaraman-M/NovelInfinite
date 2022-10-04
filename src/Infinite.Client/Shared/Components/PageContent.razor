@@ -1,0 +1,56 @@
+﻿<Microsoft.AspNetCore.Components.Web.PageTitle>@PageTitle | @ApplicationConstants.AppName</Microsoft.AspNetCore.Components.Web.PageTitle>
+<div class="page-wrapper">
+    @if (!string.IsNullOrEmpty(Title) || !(string.IsNullOrEmpty(PreTitle)))
+    {
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        @if (!string.IsNullOrEmpty(PreTitle))
+                        {
+                            <div class="page-pretitle">
+                                @PreTitle
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(Title))
+                        {
+                            <div class="page-title">
+                                @Title
+                            </div>
+                        }
+                    </div>
+                    @if (HeaderActions != null)
+                    {
+                        <div class="col-12 col-md-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                @HeaderActions
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="page-body">
+        <div class="container-xl">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string PageTitle { get; set; } 
+    
+    [Parameter]
+    public string PreTitle { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+    
+    [Parameter]
+    public RenderFragment HeaderActions { get; set; }
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
