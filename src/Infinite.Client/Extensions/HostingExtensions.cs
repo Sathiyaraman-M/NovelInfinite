@@ -1,8 +1,7 @@
 ﻿using Infinite.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using MudBlazor;
-using MudBlazor.Services;
+using TabBlazor;
 
 namespace Infinite.Client.Extensions;
 
@@ -12,17 +11,14 @@ public static class HostingExtensions
     {
         builder.RootComponents.Add<App>("#app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
-        builder.ConfigureClientServices();
-        return builder;
+        return builder.ConfigureClientServices();
     }
 
     private static WebAssemblyHostBuilder ConfigureClientServices(this WebAssemblyHostBuilder builder)
     {
         builder.Services.ConfigureHttpClients(builder.HostEnvironment.BaseAddress);
         builder.Services.AddApiAuthorization();
-        builder.Services.AddMudServices();
-        builder.Services.AddMudMarkdownServices();
-        builder.Services.AddSingleton<AppearanceService>();
+        builder.Services.AddTabBlazor();
         return builder;
     }
 
