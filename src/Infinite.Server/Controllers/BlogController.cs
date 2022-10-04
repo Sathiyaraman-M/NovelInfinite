@@ -26,6 +26,7 @@ public class BlogController : ControllerBase
         return Ok(await _blogService.GetMyLast4Blogs(userId));
     }
     
+    [AllowAnonymous]
     [HttpGet("recent")]
     public async Task<IActionResult> GetRecentBlogsFromAuthor(string id, int n = 4)
     {
@@ -33,6 +34,7 @@ public class BlogController : ControllerBase
         return Ok(await _blogService.GetLastNBlogs(userId, id != userId, n));
     }
     
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetFullBlog(string id)
     {
