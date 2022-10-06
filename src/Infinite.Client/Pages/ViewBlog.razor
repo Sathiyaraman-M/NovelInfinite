@@ -6,7 +6,16 @@
 {
     <PageContent PageTitle="@Blog.Title">
         <ChildContent>
-            <h1>@Blog.Title</h1>
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <h1>@Blog.Title</h1>
+                <div class="d-flex align-items-center">
+                    <span class="avatar rounded-circle bg-primary-lt">AB</span>
+                    <div class="d-flex flex-column ms-2">
+                        <h4>@Blog.AuthorName</h4>
+                        <h5>@Blog.CreatedDate.ToString("MMMM d, YYYY")</h5>
+                    </div>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
                     @(new MarkupString(Markdown.ToHtml(Blog.Markdown)))
@@ -14,13 +23,6 @@
             </div>
         </ChildContent>
     </PageContent>
-@*     <MudToolBar> *@
-@*         <MudText>@Blog.AuthorName</MudText> *@
-@*         <MudText Typo="Typo.caption">Created on @Blog.CreatedDate.ToString("dd/MM/yyyy")</MudText> *@
-@*         <MudSpacer /> *@
-@*         <MudToggleIconButton T="bool" Icon="@Icons.Material.Outlined.BookmarkAdd" Color="Color.Default"  *@
-@*                              ToggledIcon="@Icons.Material.Filled.BookmarkAdded" ToggledColor="Color.Secondary" /> *@
-@*     </MudToolBar> *@
 @*     <MudText Typo="Typo.h6">More from the author</MudText> *@
 @*     @if (RecentFromAuthor != null) *@
 @*     { *@
