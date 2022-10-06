@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-between my-2">
                 <h1>Create New Blog</h1>
                 <div class="d-flex">
-                    <Button>Cancel</Button>
+                    <Button OnClick="@(() => NavigationManager.NavigateTo("/Personal"))">Cancel</Button>
                     <Button BackgroundColor="TablerColor.Primary" class="mx-2">Save To Drafts</Button>
                     <Button Type="ButtonType.Submit" BackgroundColor="TablerColor.Success">Publish</Button>
                 </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label class="form-label">Content(In Markdown)</label>
-                            <textarea @bind="@Model.Markdown" @bind:event="oninput" class="form-control" />
+                            <textarea @bind="@Model.Markdown" @bind:event="oninput" class="form-control"></textarea>
                         </div>
                         <div class="col-12 mb-3">
                             <label class="form-label">Preview</label>
@@ -60,7 +60,7 @@
     {
         if (Id != Guid.Empty && Id != null)
         {
-            var result = await HttpClient.GetFromJsonAsync<Result<Blog>>($"api/blog/{Id}/personal");
+            var result = await HttpClient.GetFromJsonAsync<Result<Blog>>($"api/blog/{Id}");
             if (result!.Succeeded)
             {
                 Model = result.Data;
@@ -79,18 +79,38 @@
 
     private async Task SubmitAsync()
     {
-        var response = await HttpClient.PostAsJsonAsync("api/blog/personal", Model);
-        var result = await response.ToResult();
-        if (result.Succeeded)
+        if (Id != Guid.Empty && Id != null)
         {
-            await ToastService.AddToastAsync(new ToastModel("Error", "", "Create a blog successfully"));
-            NavigationManager.NavigateTo("/Personal");
+            var response = await HttpClient.PutAsJsonAsync($"api/blog/personal/{Id}", Model);
+            var result = await response.ToResult();
+            if (result.Succeeded)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Update Success", "", "Updated blog successfully"));
+                NavigationManager.NavigateTo("/Personal");
+            }
+            else
+            {
+                foreach (var message in result.Messages)
+                {
+                    await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+                }
+            }
         }
         else
         {
-            foreach (var message in result.Messages)
+            var response = await HttpClient.PostAsJsonAsync("api/blog/personal", Model);
+            var result = await response.ToResult();
+            if (result.Succeeded)
             {
-                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+                await ToastService.AddToastAsync(new ToastModel("Success", "", "Create a blog successfully"));
+                NavigationManager.NavigateTo("/Personal");
+            }
+            else
+            {
+                foreach (var message in result.Messages)
+                {
+                    await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+                }
             }
         }
     }
