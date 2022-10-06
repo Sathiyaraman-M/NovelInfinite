@@ -1,9 +1,8 @@
 ﻿@page "/Personal/Portfolio"
 @using Infinite.Client.Extensions
 @layout EditorLayout
-<PageTitle>Your Portfolio | @ApplicationConstants.AppName</PageTitle>
 <MudAppBar Dense>
-    <MudIconButton Edge="Edge.Start" Icon="@Icons.Material.Filled.ArrowBack" Color="Color.Inherit" Href="/Personal/Manage" />
+    <MudIconButton Edge="Edge.Start" Icon="Icons.Material.Filled.ArrowBack" Color="Color.Inherit" Href="/Personal/Manage" />
     <MudText Typo="Typo.h5" Class="ml-2">@ApplicationConstants.AppName</MudText>
     <MudSpacer/>
     @if (_isLoaded)
@@ -19,7 +18,7 @@
     }
     <MudText></MudText>
     <MudSpacer/>
-    <MudButton StartIcon="@Icons.Material.Filled.Save" Color="Color.Inherit" OnClick="SaveAsync">Save</MudButton>
+    <MudButton StartIcon="Icons.Material.Filled.Save" Color="Color.Inherit" OnClick="SaveAsync">Save</MudButton>
 </MudAppBar>
 <MudMainContent>
     <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
@@ -27,7 +26,7 @@
         {
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="_userPortFolioMd" Variant="Variant.Outlined" Margin="Margin.Dense" 
+                    <MudTextField Value="_userPortFolioMd" Variant="Variant.Outlined" Margin="Margin.Dense" 
                                   Immediate Lines="10" />
                 </MudItem>
                 <MudItem xs="12">
@@ -65,7 +64,7 @@
         {
             foreach (var message in result.Messages)
             {
-                Snackbar.Add(message, Severity.Error);
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
             }
         }
         await base.OnInitializedAsync();
@@ -78,14 +77,14 @@
         var result = await response.ToResult();
         if (result.Succeeded)
         {
-            Snackbar.Add(result.Messages.FirstOrDefault());
+            await ToastService.AddToastAsync(new ToastModel("Success", "", result.Messages.FirstOrDefault()));
             NavigationManager.NavigateTo("/Personal");
         }
         else
         {
             foreach (var message in result.Messages)
             {
-                Snackbar.Add(message, Severity.Error);
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
             }
         }
     }
