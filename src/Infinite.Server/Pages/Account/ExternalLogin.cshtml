@@ -6,24 +6,16 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<h2 id="external-login-title" class="mdc-typography--h4">Associated your @Model.ProviderDisplayName account.</h2>
+<h2 id="external-login-title">Associated your @Model.ProviderDisplayName account.</h2>
 <hr/>
 
-<p id="external-login-description" class="mdc-typography--body1">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-</p>
+<p id="external-login-description">You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.</p>
 
 <div class="row">
     <div class="col-md-4">
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <input asp-for="Input.Email" class="form-control" hidden readonly autocomplete="email"/>
-            <div class="mdc-touch-target-wrapper">
-                <button class="mdc-button mdc-button--touch mdc-button--raised" type="submit">
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__touch"></span>
-                    <span class="mdc-button__label">Enter Infinite</span>
-                </button>
-            </div>
+            <button type="submit">Enter Infinite</button>
         </form>
     </div>
 </div>
