@@ -2,6 +2,7 @@
 using Infinite.Core.Interfaces.Repositories;
 using Infinite.Shared.Entities;
 using Infinite.Shared.Enums;
+using Infinite.Shared.Responses;
 using Infinite.Shared.Wrapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,12 @@ public class BlogService : IBlogService
         _userManager = userManager;
     }
 
-    public async Task<IResult<List<Blog>>> GetMyLast4Blogs(string userId)
+    public async Task<IResult<List<BlogResponse>>> GetMyLast4Blogs(string userId)
     {
         return await GetLastNBlogs(userId, false, 4);
     }
 
-    public async Task<IResult<List<Blog>>> GetLastNBlogs(string userId, bool isOnlyPublic, int n)
+    public async Task<IResult<List<BlogResponse>>> GetLastNBlogs(string userId, bool isOnlyPublic, int n)
     {
         try
         {
@@ -35,13 +36,22 @@ public class BlogService : IBlogService
                                                     .WhereIf(isOnlyPublic, x => x.Visibility == Visibility.Public)
                                                     .OrderByDescending(x => x.CreatedDate)
                                                     .Take(4)
+                                                    .Select(x => new BlogResponse
+                                                    {
+                                                        Id = x.Id,
+                                                        AuthorName = x.AuthorName,
+                                                        CreatedDate = x.CreatedDate,
+                                                        LastEditedDate = x.LastEditedDate,
+                                                        Title = x.Title,
+                                                        Visibility = x.Visibility
+                                                    })
                                                     .ToListAsync();
 
-            return await Result<List<Blog>>.SuccessAsync(blogs);
+            return await Result<List<BlogResponse>>.SuccessAsync(blogs);
         }
         catch (Exception e)
         {
-            return await Result<List<Blog>>.FailAsync(e.Message);
+            return await Result<List<BlogResponse>>.FailAsync(e.Message);
         }
         
     }
@@ -69,6 +79,7 @@ public class BlogService : IBlogService
             blog.UserId = userId;
             blog.AuthorName = (await _userManager.FindByIdAsync(userId)).UserName;
             blog.CreatedDate = DateTime.Now;
+            blog.LastEditedDate = DateTime.Now;
             if (string.IsNullOrEmpty(blog.Title))
                 throw new Exception("Please enter blog title");
             if (string.IsNullOrEmpty(blog.Markdown))
@@ -83,10 +94,18 @@ public class BlogService : IBlogService
         }
     }
 
-    public async Task<IResult> UpdateBlog(Blog blog)
+    public async Task<IResult> UpdateBlog(Blog blog, string userId)
     {
         try
         {
+            if (userId != blog.UserId)
+                throw new Exception("Bad Request");
+            blog.LastEditedDate = DateTime.Now;
+            if (string.IsNullOrEmpty(blog.Title))
+                throw new Exception("Please enter blog title");
+            if (string.IsNullOrEmpty(blog.Markdown))
+                throw new Exception("Please add some content in the blog. Empty blog cannot be posted");
+            await _unitOfWork.GetRepository<Blog>().UpdateAsync(blog, blog.Id);
             await _unitOfWork.Commit();
             return await Result.SuccessAsync();
         }
@@ -100,6 +119,10 @@ public class BlogService : IBlogService
     {
         try
         {
+            var blog = await _unitOfWork.GetRepository<Blog>().GetByIdAsync(id);
+            if (blog is null)
+                throw new Exception("Blog not found");
+            await _unitOfWork.GetRepository<Blog>().DeleteAsync(blog);
             await _unitOfWork.Commit();
             return await Result.SuccessAsync();
         }

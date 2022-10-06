@@ -48,4 +48,17 @@ public class BlogController : ControllerBase
         var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
         return Ok(await _blogService.CreateBlog(blog, userId));
     }
+
+    [HttpPut("personal/{id}")]
+    public async Task<IActionResult> UpdateBlogPersonal(Blog blog, string id)
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogService.UpdateBlog(blog, userId));
+    }
+
+    [HttpDelete("personal/{id}")]
+    public async Task<IActionResult> DeleteBlogPersonal(string id)
+    {
+        return Ok(await _blogService.DeleteBlog(id));
+    }
 }
