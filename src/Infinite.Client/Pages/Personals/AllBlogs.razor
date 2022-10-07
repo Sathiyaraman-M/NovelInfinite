@@ -1,0 +1,78 @@
+﻿@page "/Personal/Blogs"
+@using Infinite.Shared.Responses
+<PageContent PageTitle="View all blogs">
+    <ChildContent>
+        <div class="d-flex justify-content-between align-center w-100 mb-3">
+            <h1>Your Blogs</h1>
+            <div class="d-flex align-center">
+                <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2 me-2"
+                        LinkTo="/Personal/Blogs/New" Type="ButtonType.Link">
+                    <Icon IconType="TablerIcons.Plus" class="me-2"></Icon>
+                    Create New
+                </Button>
+                <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2">
+                    <Icon IconType="TablerIcons.Refresh" class="me-2"></Icon>
+                    Refresh
+                </Button>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var blog in _blogs)
+            {
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <a class="card" href="@($"/Blog/{blog.Id}")">
+                        <div class="card-status-top bg-cyan"></div>
+                        <div class="card-body">
+                            <div class="card-title">@blog.Title</div>
+                            <h5>@blog.AuthorName</h5>
+                            <p>@blog.CreatedDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-list">
+                                <Button LinkTo="@($"/Personal/Blogs/{blog.Id}")" Type="ButtonType.Link">
+                                    <Icon IconType="TablerIcons.Pencil" class="me-2"></Icon>
+                                    Edit
+                                </Button>
+                                <Button>
+                                    <Icon IconType="TablerIcons.Trash" class="me-2"></Icon>
+                                    Delete
+                                </Button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </ChildContent>
+</PageContent>
+
+@code {
+    private int _pageNumber = 1;
+    private int _pageSize = 5;
+    private string _searchString;
+    private List<BlogResponse> _blogs = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        var result = await HttpClient.GetFromJsonAsync<PaginatedResult<BlogResponse>>(
+            $"api/blog/personal?pageNumber={_pageNumber}&pageSize={_pageSize}&searchString={_searchString}");
+        if (result!.Succeeded)
+        {
+            _blogs = result.Data;
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+            }
+        }
+    }
+
+}
