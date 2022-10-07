@@ -33,6 +33,13 @@ public class BlogController : ControllerBase
         var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
         return Ok(await _blogService.GetLastNBlogs(userId, id != userId, n));
     }
+
+    [HttpGet("personal")]
+    public async Task<IActionResult> GetAllPersonalBlogs(int pageNumber, int pageSize, string searchString)
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogService.GetAllBlogs(pageNumber, pageSize, searchString, userId));
+    }
     
     [AllowAnonymous]
     [HttpGet("{id}")]

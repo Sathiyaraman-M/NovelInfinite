@@ -1,5 +1,6 @@
 ﻿using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Repositories;
+using Infinite.Core.Specifications;
 using Infinite.Shared.Entities;
 using Infinite.Shared.Enums;
 using Infinite.Shared.Responses;
@@ -54,6 +55,30 @@ public class BlogService : IBlogService
             return await Result<List<BlogResponse>>.FailAsync(e.Message);
         }
         
+    }
+
+    public async Task<PaginatedResult<BlogResponse>> GetAllBlogs(int pageNumber, int pageSize, string searchString, string userId)
+    {
+        try
+        {
+            return await _unitOfWork.GetRepository<Blog>().Entities
+                .Where(x => x.UserId == userId)
+                .Specify(new PersonalBlogsSearchFilterSpecification(searchString))
+                .Select(x => new BlogResponse
+                {
+                    Id = x.Id,
+                    AuthorName = x.AuthorName,
+                    CreatedDate = x.CreatedDate,
+                    LastEditedDate = x.LastEditedDate,
+                    Title = x.Title,
+                    Visibility = x.Visibility
+                })
+                .ToPaginatedListAsync(pageNumber, pageSize);
+        }
+        catch (Exception e)
+        {
+            return PaginatedResult<BlogResponse>.Failure(new List<string>() { e.Message });
+        }
     }
 
     public async Task<IResult<Blog>> GetFullBlog(string id, string userId)
