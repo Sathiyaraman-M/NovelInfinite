@@ -70,13 +70,20 @@
                 </div>
             </div>
             <div class="mt-4">
-                <div class="d-flex justify-content-between my-2">
+                <div class="d-flex justify-content-between align-center my-2">
                     <h2>Your Blogs</h2>
-                    <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2"
-                            OnClick="@(() => NavigationManager.NavigateTo("/Personal/Blogs/New"))">
-                        <Icon IconType="TablerIcons.Plus" class="me-1"/>
-                        New Blog
-                    </Button>
+                    <div class="d-flex align-center">
+                        <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2 me-2"
+                                LinkTo="/Personal/Blogs/New" Type="ButtonType.Link">
+                            <Icon IconType="TablerIcons.Plus" class="me-1"/>
+                            New Blog
+                        </Button>
+                        <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2"
+                                LinkTo="/Personal/Blogs" Type="ButtonType.Link">
+                            <Icon IconType="TablerIcons.ListDetails" class="me-1" />
+                            View All
+                        </Button>
+                    </div>
                 </div>
                 @if (_myLast4Blogs.Count == 0)
                 {
@@ -113,10 +120,13 @@
                                     <div class="card-footer">
                                         <div class="btn-list">
                                             <Button LinkTo="@($"/Personal/Blogs/{blog.Id}")" Type="ButtonType.Link">
-                                                <Icon IconType="TablerIcons.Pencil"></Icon>
+                                                <Icon IconType="TablerIcons.Pencil" class="me-2"></Icon>
                                                 Edit
                                             </Button>
-                                            <Button>Delete</Button>
+                                            <Button>
+                                                <Icon IconType="TablerIcons.Trash" class="me-2"></Icon>
+                                                Delete
+                                            </Button>
                                         </div>
                                     </div>
                                 </a>
