@@ -1,4 +1,5 @@
-﻿using Infinite.Client.Services.HttpClients;
+﻿using Infinite.Client.Services;
+using Infinite.Client.Services.HttpClients;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using TabBlazor;
@@ -19,6 +20,7 @@ public static class HostingExtensions
         builder.Services.ConfigureHttpClients(builder.HostEnvironment.BaseAddress);
         builder.Services.AddApiAuthorization();
         builder.Services.AddTabBlazor();
+        builder.Services.AddSingleton<NavigationService>();
         return builder;
     }
 
