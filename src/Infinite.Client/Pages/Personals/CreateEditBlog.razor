@@ -11,7 +11,7 @@
                 <h1>Create New Blog</h1>
                 <div class="d-flex">
                     <Button OnClick="@(() => NavigationService.NavigateBack())">Cancel</Button>
-                    <Button BackgroundColor="TablerColor.Primary" class="mx-2">Save To Drafts</Button>
+                    <Button OnClick="@(SaveToDraftsAsync)" BackgroundColor="TablerColor.Primary" class="mx-2">Save To Drafts</Button>
                     <Button Type="ButtonType.Submit" BackgroundColor="TablerColor.Success">Publish</Button>
                 </div>
             </div>
@@ -75,6 +75,31 @@
             }
         }
         await base.OnParametersSetAsync();
+    }
+
+    private async Task SaveToDraftsAsync()
+    {
+        var blogDraft = new BlogDraft()
+        {
+            MarkdownContent = Model.Markdown,
+            Title = Model.Title,
+            SaveDateTime = DateTime.Now,
+            BlogId = string.IsNullOrEmpty(Model.Id) ? Guid.Empty.ToString() : Model.Id
+        };
+        var response = await HttpClient.PostAsJsonAsync("api/blog-draft/save", blogDraft);
+        var result = await response.ToResult();
+        if (result.Succeeded)
+        {
+            await ToastService.AddToastAsync(new ToastModel("Success", "", result.Messages.FirstOrDefault()));
+            NavigationManager.NavigateTo("/Personal");
+        }
+        else
+        {
+            foreach (var message in result.Messages)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+            }
+        }
     }
 
     private async Task SubmitAsync()
