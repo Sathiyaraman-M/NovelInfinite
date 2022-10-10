@@ -36,7 +36,7 @@ public class BlogService : IBlogService
                                                     .Where(x => x.UserId == userId)
                                                     .WhereIf(isOnlyPublic, x => x.Visibility == Visibility.Public)
                                                     .OrderByDescending(x => x.CreatedDate)
-                                                    .Take(4)
+                                                    .Take(n)
                                                     .Select(x => new BlogResponse
                                                     {
                                                         Id = x.Id,
