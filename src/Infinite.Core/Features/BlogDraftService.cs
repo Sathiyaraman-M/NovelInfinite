@@ -1,6 +1,7 @@
 ﻿using Infinite.Core.Extensions;
 using Infinite.Core.Interfaces.Repositories;
 using Infinite.Shared.Entities;
+using Infinite.Shared.Responses;
 using Infinite.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,33 @@ public class BlogDraftService : IBlogDraftService
     public BlogDraftService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
+    }
+
+    public async Task<IResult<List<BlogDraftResponse>>> GetMyLastNBlogDrafts(string userId, int n = 4)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new Exception("User not found!");
+            var blogDrafts = await _unitOfWork.GetRepository<BlogDraft>().Entities
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.SaveDateTime)
+                .Take(n)
+                .Select(x => new BlogDraftResponse
+                {
+                    Id = x.Id,
+                    AuthorName = x.AuthorName,
+                    SaveDateTime = x.SaveDateTime,
+                    Title = x.Title,
+                    BlogId = x.BlogId
+                })
+                .ToListAsync();
+            return await Result<List<BlogDraftResponse>>.SuccessAsync(blogDrafts);
+        }
+        catch (Exception e)
+        {
+            return await Result<List<BlogDraftResponse>>.FailAsync(e.Message);
+        }
     }
 
     public async Task<PaginatedResult<BlogDraft>> GetBlogDrafts(int pageNumber, int pageSize, string searchString, string userId)
@@ -52,6 +80,7 @@ public class BlogDraftService : IBlogDraftService
                 .FirstOrDefaultAsync(x => x.BlogId == draft.BlogId);
             draft.SaveDateTime = DateTime.Now;
             draft.UserId = userId;
+            draft.AuthorName = (await _unitOfWork.GetRepository<UserProfileInfo>().Entities.FirstAsync(x => x.UserId == userId)).FullName;
             if (existingDraft == null)
             {
                 draft.Id = Guid.NewGuid().ToString();

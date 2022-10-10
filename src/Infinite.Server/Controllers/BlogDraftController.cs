@@ -25,6 +25,14 @@ public class BlogDraftController : ControllerBase
         var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
         return Ok(await _blogDraftService.GetBlogDrafts(pageNumber, pageSize, searchString, userId));
     }
+    
+    
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetMyLastNBlogDrafts(int n = 4)
+    {
+        var userId = HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+        return Ok(await _blogDraftService.GetMyLastNBlogDrafts(userId));
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetByIdAsync(string id)
