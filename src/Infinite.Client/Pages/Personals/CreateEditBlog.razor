@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-between my-2">
                 <h1>Create New Blog</h1>
                 <div class="d-flex">
-                    <Button OnClick="@(() => NavigationManager.NavigateTo("/Personal"))">Cancel</Button>
+                    <Button OnClick="@(() => NavigationService.NavigateBack())">Cancel</Button>
                     <Button BackgroundColor="TablerColor.Primary" class="mx-2">Save To Drafts</Button>
                     <Button Type="ButtonType.Submit" BackgroundColor="TablerColor.Success">Publish</Button>
                 </div>
