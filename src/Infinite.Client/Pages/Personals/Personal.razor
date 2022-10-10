@@ -135,6 +135,61 @@
                     </div>
                 }
             </div>
+            <div class="mt-4">
+                <div class="d-flex justify-content-between align-center my-2">
+                    <h2>Your Saved Drafts</h2>
+                    <div class="d-flex align-center">
+                        <Button BackgroundColor="TablerColor.White" Size="ButtonSize.Small" class="rounded-2"
+                                LinkTo="/Personal/Drafts" Type="ButtonType.Link">
+                            <Icon IconType="TablerIcons.ListDetails" class="me-1" />
+                            View All
+                        </Button>
+                    </div>
+                </div>
+                @if (!_isBlogDraftsLoaded)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="w-100 d-flex justify-center">
+                                <div class="w-100 d-flex flex-column align-items-center">
+                                    <h4>No Saved Drafts!</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var blogDraft in _myLast4BlogDrafts)
+                        {
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <a class="card" href="@($"/Blog/{blogDraft.BlogId}")">
+                                    <div class="card-status-top bg-cyan"></div>
+                                    <div class="card-body">
+                                        <div class="card-title">@blogDraft.Title</div>
+                                        <h5>@blogDraft.AuthorName</h5>
+                                        <p>Last worked on @blogDraft.SaveDateTime.ToString("MMMM dd, yyyy")</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="btn-list">
+                                            <Button LinkTo="@($"/Personal/Blogs/{blogDraft.BlogId}")" 
+                                                    Type="ButtonType.Link" BackgroundColor="TablerColor.White">
+                                                <Icon IconType="TablerIcons.Pencil" class="me-2"></Icon>
+                                                Edit
+                                            </Button>
+                                            <Button BackgroundColor="TablerColor.White">
+                                                <Icon IconType="TablerIcons.Trash" class="me-2"></Icon>
+                                                Delete
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
         </ChildContent>
     </PageContent>
 }
@@ -146,18 +201,25 @@ else
 @code {
     private string _userPortFolioMd;
     private List<BlogResponse> _myLast4Blogs = new();
+    private List<BlogDraftResponse> _myLast4BlogDrafts = new();
     private bool _isMdLoaded;
     private bool _isBlogsLoaded;
+    private bool _isBlogDraftsLoaded;
 
-    private MarkdownPipeline Pipeline => new MarkdownPipelineBuilder().UseAdvancedExtensions().UseEmojiAndSmiley().Build();
+    private static MarkdownPipeline Pipeline => new MarkdownPipelineBuilder()
+        .UseAdvancedExtensions()
+        .UseEmojiAndSmiley()
+        .Build();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadPortfolio();
         await LoadLatestBlogs();
+        await LoadLatestBlogDrafts();
         await base.OnInitializedAsync();
         _isMdLoaded = true;
         _isBlogsLoaded = true;
+        _isBlogDraftsLoaded = true;
     }
 
     private async Task LoadPortfolio()
@@ -186,6 +248,22 @@ else
         else
         {
             foreach (var message in blogsResult.Messages)
+            {
+                await ToastService.AddToastAsync(new ToastModel("Error", "", message));
+            }
+        }
+    }
+
+    private async Task LoadLatestBlogDrafts()
+    {
+        var blogDraftResult = await HttpClient.GetFromJsonAsync<Result<List<BlogDraftResponse>>>("api/blog-draft/recent");
+        if (blogDraftResult!.Succeeded)
+        {
+            _myLast4BlogDrafts = blogDraftResult.Data;
+        }
+        else
+        {
+            foreach (var message in blogDraftResult.Messages)
             {
                 await ToastService.AddToastAsync(new ToastModel("Error", "", message));
             }
